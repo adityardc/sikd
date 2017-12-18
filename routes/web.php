@@ -15,7 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'HomeController@index')->middleware('buat_tabel');
+Route::get('/', 'HomeController@index');
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
@@ -144,5 +144,10 @@ Route::put('/surat_masuk/{id?}', 'coSuratmasuk@update');
 // Route modul agenda direksi langsung
 Route::get('/agenda_langsung', 'coAgenda_langsung@index')->middleware('auth', 'cek_role')->name('agenda_langsung');
 Route::get('/agenda_langsung/data', 'coAgenda_langsung@listAgenda')->middleware('auth', 'cek_role')->name('agenda_langsung.data');
+Route::post('/agenda_langsung/store', 'coAgenda_langsung@store')->name('agenda_langsung.simpan');
+Route::put('/agenda_langsung/{id?}', 'coAgenda_langsung@update');
+Route::get('/agenda_langsung/{id?}/edit', 'coAgenda_langsung@edit');
+Route::get('/agenda_langsung/{id?}/unggah', 'coAgenda_langsung@unggah_disposisi');
+Route::get('/agenda_langsung/{id?}/detail', 'coAgenda_langsung@detailAgenda');
 
-Route::get('/home', 'HomeController@index')->middleware('buat_tabel')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');

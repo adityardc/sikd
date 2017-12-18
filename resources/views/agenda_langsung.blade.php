@@ -78,7 +78,7 @@
                                             <button type="submit" class="btn btn-azure" id="btnSimpan">Simpan</button>
                                             <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
                                             <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
-                                            <input type="text" name="id_agenda_dir" id="id_agenda_dir" class="form-control" style="display: block;">
+                                            <input type="text" name="id_agenda_dir" id="id_agenda_dir" class="form-control" style="display: none;">
                                         </div>
                 					</div>
                 				</div>
@@ -90,14 +90,14 @@
 					                        Data Surat Masuk
 					                    </div>
 					                    <div class="row">
-					                        <div class="col-md-3">
+					                        <div class="col-md-4">
 					                            <div class="form-group">
 					                                <label for="tanggal_surat">Tanggal Surat</label>
 					                                <input type="text" class="form-control" id="tanggal_surat" name="tanggal_surat" data-bv-field="tanggal_surat">
 					                                <i class="form-control-feedback" data-bv-field="tanggal_surat" style="display: none;"></i>
 					                            </div> 
 					                        </div>
-					                        <div class="col-md-9">
+					                        <div class="col-md-8">
 					                            <div class="form-group">
 					                                <label for="nomor_surat">Nomor Surat</label>
 					                                <input type="text" class="form-control" id="nomor_surat" name="nomor_surat" data-bv-field="nomor_surat" onkeyup="upNomorsurat()" maxlength="100">
@@ -148,12 +148,59 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bs-example-modal-sm" id="modalUnggah" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-primary">
+            <div class="modal-content">
+                <form class="bv-form" role="form" id="frmUnggah" novalidate="novalidate" enctype="multipart/form-data">
+                    <div class="modal-header bordered-azure">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="mySmallModalLabel">Unggah Berkas Disposisi</h4>
+                    </div>
+                    <div class="modal-body modal-body-pendek">
+                        <div id="tampilAgenda"></div>
+                        <!-- <div class="form-group">
+                            <label for="file_surat">Upload Surat</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <span class="btn btn-palegreen btn-file">
+                                        Browse <input type="file" name="file_surat" id="file_surat" accept="application/pdf">
+                                    </span>
+                                </span>
+                                <input type="text" class="form-control" name="namaFile" id="namaFile" readonly>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-azure" data-dismiss="modal">Tutup</button>
+                        <!-- <button type="submit" class="btn btn-primary">Simpan</button> -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-primary">
+            <div class="modal-content">
+                <div class="modal-header bordered-azure">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="mySmallModalLabel">Detail Surat Masuk</h4>
+                </div>
+                <div class="modal-body modal-body-panjang">
+                    <div id="detailAgenda"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-azure" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
     <script src="{{ asset('assets/js/jquery.datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatable/datatables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/validation/bootstrapValidator.js') }}"></script>
+    <script src="{{ asset('assets/js/datetime/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript">
         // Function mencegah submit form dari tombol enter
         function stopRKey(evt) {
@@ -190,18 +237,27 @@
             });
 
             $.ajax({
-                url: "jabatan/"+id+"/edit",
+                url: "agenda_langsung/"+id+"/edit",
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function(){
                     $('#imgLoader').show();
                 },
                 success: function(data){
-                    $('#frmJabatan').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-                    $('#nama_jabatan').val(data.nama_jabatan);
-                    $('#id_jabatan').val(data.id_jabatan);
+                    $('#frmAgendalangsung').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                    $('[name="tujuan"]').val(data.id_tujuan);
+                    $('[name="tipe_agenda"]').val(data.id_jenis_surat);
+                    $('[name="tanggal_agenda"]').val(data.tanggal_agenda);
+                    $('[name="sifat_surat"]').val(data.sifat_surat);
+                    $('[name="tanggal_surat"]').val(data.tanggal_surat);
+                    $('[name="nomor_surat"]').val(data.nomor_surat);
+                    $('[name="pengirim"]').val(data.pengirim);
+                    $('[name="perihal"]').val(data.perihal);
+                    $('[name="id_agenda_dir"]').val(data.id_agenda_dir);
+
+                    $('[name="tujuan"]').attr('disabled', true);
+                    $('[name="tipe_agenda"]').attr('disabled', true);
                     $('#btnBatal').show();
-                    $('#nama_jabatan').focus();
                 },
                 complete: function(){
                     $('#imgLoader').hide();
@@ -213,50 +269,59 @@
             return false;
         }
 
-        // Function ketika tombol hapus
-        function deleteData(id){
+        // Function Unggah disposisi direksi
+        function unggah_surat(id){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
-            swal({
-                title: "Konfirmasi !",
-                text: "Anda yakin menghapus data jabatan ini ?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes !'
-            }).then(function(){
-                $.ajax({
-                    url: "jabatan/"+id,
-                    type: "DELETE",
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#imgLoader').show();
-                    },
-                    success:function(response){
-                        if(response.status == 3){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil dihapus.'];
-                        }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal dihapus.'];
-                        }
+            $.ajax({
+                url: "agenda_langsung/"+id+"/unggah",
+                type: "GET",
+                beforeSend: function(){
+                    $('#imgLoader').show();
+                },
+                success: function(data){
+                    $('#frmAgendalangsung').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                    $('#tampilAgenda').html(data);
+                    $("#modalUnggah").modal('show');
+                },
+                complete: function(){
+                    $('#imgLoader').hide();
+                },
+                error: function(){
+                    alert("Tidak dapat menampilkan data!");
+                }
+            });
+        }
 
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_jabatan').focus();
-                        $('#btnBatal').hide();
-                        oTable.ajax.reload();
-                    },
-                    complete: function(){
-                        $('#imgLoader').hide();
-                    }
-                });
-            }).catch(swal.noop);
+        // Function detail agenda direksi
+        function detail_surat(id){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "agenda_langsung/"+id+"/detail",
+                type: "GET",
+                beforeSend: function(){
+                    $('#imgLoader').show();
+                },
+                success: function(data){
+                    $('#detailAgenda').html(data);
+                    $('#modalDetail').modal('show');
+                },
+                complete: function(){
+                    $('#imgLoader').hide();
+                },
+                error: function(){
+                    alert("Tidak dapat menampilkan data!");
+                }
+            });
         }
 
         $(document).ready(function(){
@@ -266,8 +331,28 @@
 
             $('#btnBatal').click(function(){
                 $('#frmAgendalangsung')[0].reset();
+                $('[name="tujuan"]').attr('disabled', false);
+                $('[name="tipe_agenda"]').attr('disabled', false);
                 $('#btnBatal').hide();
             });
+
+            var tgl_surat = $('#tanggal_surat').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'yyyy-mm-dd'
+            }).on('changeDate', function(ev){
+                tgl_surat.hide();
+                $('#frmAgendalangsung').bootstrapValidator('revalidateField', 'tanggal_surat');
+            }).data('datepicker');
+
+            var tgl_agenda = $('#tanggal_agenda').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'yyyy-mm-dd'
+            }).on('changeDate', function(ev){
+                tgl_agenda.hide();
+                $('#frmAgendalangsung').bootstrapValidator('revalidateField', 'tanggal_agenda');
+            }).data('datepicker');
 
             oTable = $('#tblAgenda_langsung').DataTable({
                 initComplete: function(){
@@ -285,16 +370,24 @@
                     "url": "{{ route('agenda_langsung.data') }}",
                     "type": "GET"
                 },
-                "columnDefs": [
-                    {
-                        className: "text-center",
-                        targets: [0,5]
-                    },
-                    {
-                        orderable: false,
-                        targets: [0,5]
-                    }
-                ]
+                "aoColumnDefs": [{
+                    "aTargets": [0],
+                    "sWidth": "2%",
+                    "sClass": "text-center"
+                },{
+                    "aTargets": [1],
+                    "sWidth": "10%"
+                },{
+                   "aTargets": [2],
+                    "sWidth": "18%"
+                },{
+                   "aTargets": [3,4],
+                    "sWidth": "25%"
+                },{
+                   "aTargets": [5],
+                    "sWidth": "10%",
+                    "sClass": "text-center" 
+                }]
             });
 
             $('#frmAgendalangsung').bootstrapValidator({
@@ -316,7 +409,7 @@
                             }
                         }
                     },
-                    tanggal_agenda: {
+                    tanggal_surat: {
                     	validators: {
                             notEmpty: {
                                 message: 'Kolom harus diisi !'
@@ -363,46 +456,54 @@
                 }
             }).on('success.form.bv', function(e){
                 e.preventDefault();
-                var id = $('#id_jabatan').val();
+                var id = $('#id_agenda_dir').val();
                 if(id == ""){
-                    url = "{{ route('jabatan.simpan') }}";
+                    url = "{{ route('agenda_langsung.simpan') }}";
                     type = "POST";
                 }else{
-                    url = "jabatan/"+id;
+                    url = "agenda_langsung/"+id;
                     type = "PUT";
                 }
 
                 $.ajax({
                     url: url,
                     type: type,
-                    data: $('#frmJabatan').serialize(),
+                    data: $('#frmAgendalangsung').serialize(),
                     dataType: 'JSON',
                     beforeSend: function(){
                         $('#imgLoader').show();
                     },
                     success: function(data){
                         if(data.status == 1){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil disimpan.'];
+                            swal({
+                                title: "Nomor Agenda Direksi : "+data.nomor,
+                                text: "Surat masuk berhasil disimpan.",
+                                type: "success",
+                                width: "50%"
+                            });
                         }else if(data.status == 2){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil diubah.'];
+                            swal({
+                                title: "Berhasil !",
+                                text: "Surat keluar berhasil diubah.",
+                                type: "success",
+                                width: "50%"
+                            });
                         }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal disimpan/diubah.'];
+                            swal('Gagal !', 'Data surat gagal disimpan.', 'error');
                         }
 
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_jabatan').focus();
                         $('#btnBatal').hide();
+                        $('[name="tujuan"]').attr('disabled', false);
+                        $('[name="tipe_agenda"]').attr('disabled', false);
+                        $('#frmAgendalangsung')[0].reset();
                         oTable.ajax.reload();
                     },
                     complete: function(){
                         $('#imgLoader').hide();
                     }
                 });
-                $('#id_jabatan').val("");
-                $('#frmJabatan').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
+                $('#id_agenda_dir').val("");
+                $('#frmAgendalangsung').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
             });
         });
     </script>

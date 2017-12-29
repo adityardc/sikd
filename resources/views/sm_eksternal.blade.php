@@ -15,11 +15,11 @@
         <i class="fa fa-hdd-o"></i>
         <a href="#">Agenda Sentral</a>
     </li>
-    <li class="active">Surat Masuk</li>
+    <li class="active">Surat Masuk Eksternal</li>
 @endsection
 
 @section('title')
-    Halaman Surat Masuk
+    Halaman Surat Masuk Eksternal
 @endsection
 
 @section('content')
@@ -27,7 +27,7 @@
 		<div class="col-lg-12 col-sm-12 col-xs-12">
 			<div class="widget">
 				<div class="widget-header bordered-bottom bordered-purple">
-                    <span class="widget-caption">Form Surat Masuk</span>
+                    <span class="widget-caption">Form Surat Masuk Eksternal</span>
                 </div>
                 <div class="widget-body">
                 	<form class="bv-form" role="form" id="frmSuratmasuk" novalidate="novalidate">
@@ -40,7 +40,7 @@
 					                        Data Surat Masuk
 					                    </div>
 					                    <div class="row">
-					                        <div class="col-md-6">
+					                        <!-- <div class="col-md-6">
 					                            <div class="form-group">
 					                                <label for="tipe_agenda">Tipe Agenda</label>
 					                                <select class="form-control" name="tipe_agenda" id="tipe_agenda">
@@ -48,7 +48,7 @@
 					                                    <option value="E">EKSTERNAL</option>
 					                                </select>
 					                            </div>  
-					                        </div>
+					                        </div> -->
 					                        <div class="col-md-6">
 					                            <div class="form-group">
 					                                <label for="tanggal_agenda">Tanggal Agenda</label>
@@ -90,14 +90,14 @@
 			                            <div class="form-group">
                                             <label for="pengirim">Pengirim</label>
                                             <div class="input-group">
-                                                <span class="input-group-btn">
+                                                <!-- <span class="input-group-btn">
                                                     <button class="btn btn-purple" type="button" id="btnPengirim" data-toggle="modal" data-target="#modalPengirim"><i class="fa fa-search-plus"></i></button>
-                                                </span>
-                                                <input type="text" class="form-control" name="pengirim" data-bv-field="pengirim" readonly="true">
+                                                </span> -->
+                                                <input type="text" class="form-control" name="pengirim" data-bv-field="pengirim" readonly="true" value="LAIN-LAIN">
                                             </div>
                                             <i class="form-control-feedback" data-bv-field="pengirim" style="display: none;"></i>
                                         </div>
-                                        <div class="form-group divNamapengirim">
+                                        <div class="form-group">
                                             <label for="nama_pengirim">Nama Pengirim</label>
                                             <input type="text" class="form-control" id="nama_pengirim" name="nama_pengirim" onkeyup="upNamapengirim()" data-bv-field="nama_pengirim">
                                             <i class="form-control-feedback" data-bv-field="nama_pengirim" style="display: none;"></i>
@@ -172,7 +172,7 @@
                                             <button type="submit" class="btn btn-purple" id="btnSimpan">Simpan</button>
                                             <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
                                             <input type="text" name="id_suratmasuk" class="form-control" style="display: none;">
-                                            <input type="text" name="id_pengirim" class="form-control" style="display: none;">
+                                            <input type="text" name="id_pengirim" class="form-control" style="display: none;" value="17">
                                             <input type="text" name="id_klasifikasi" class="form-control" style="display: none;">
                                             <input type="text" name="id_tujuan" class="form-control" style="display: none;">
                                             <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
@@ -190,7 +190,7 @@
         <div class="col-lg-12 col-sm-12 col-xs-12">
             <div class="widget">
                 <div class="widget-header bg-purple">
-                    <span class="widget-caption">Tabel Surat Masuk</span>
+                    <span class="widget-caption">Tabel Surat Masuk Eksternal</span>
                 </div>
                 <div class="widget-body">
                     <table class="table bordered-purple table-striped table-bordered table-hover responsive" id="tblSuratmasuk">
@@ -225,32 +225,6 @@
                                 <th class="text-center">Aksi</th>
                                 <th class="text-center">Kode</th>
                                 <th class="text-center">Kamus Arsip</th>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-purple" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade bs-example-modal-sm" id="modalPengirim" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bordered-purple">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="mySmallModalLabel">Tabel Bagian</h4>
-                </div>
-                <div class="modal-body modal-body-panjang">
-                    <div class="table-responsive">
-                        <table class="table bordered-purple table-striped table-bordered table-hover" id="tblPengirim" width="100%">
-                            <thead class="bordered-purple">
-                                <th class="text-center">No</th>
-                                <th class="text-center">Aksi</th>
-                                <th class="text-center">Bagian/Unit kerja</th>
-                                <th class="text-center">Kode</th>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -377,7 +351,7 @@
             });
 
             $.ajax({
-                url: "surat_masuk/"+id+"/edit",
+                url: "sm_eksternal/"+id+"/edit",
                 type: "GET",
                 dataType: "JSON",
                 beforeSend: function(){
@@ -385,26 +359,17 @@
                 },
                 success: function(data){
                     $('#frmSuratmasuk').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-                    $('[name="tipe_agenda"]').val(data.tipe_agenda);
                     $('[name="tanggal_agenda"]').val(data.tanggal_agenda);
                     $('[name="nomor_surat"]').val(data.nomor_surat);
                     $('[name="kode_klasifikasi"]').val(data.sd1);
                     $('[name="tanggal_surat"]').val(data.tanggal_surat);
                     $('[name="pokok_masalah"]').val(data.sd3);
-                    $('[name="pengirim"]').val(data.pengirim);
                     $('[name="nama_pengirim"]').val(data.nama_pengirim);
                     $('[name="tujuan"]').val(data.tujuan);
                     $('[name="perihal"]').val(data.perihal);
                     $('[name="id_suratmasuk"]').val(data.id_surat_masuk);
-                    $('[name="id_pengirim"]').val(data.id_pengirim);
                     $('[name="id_klasifikasi"]').val(data.id_klasifikasi);
                     $('[name="id_tujuan"]').val(data.id_tujuan);
-
-                    if(data.id_pengirim == "17"){
-                        $('.divNamapengirim').show();
-                    }else{
-                        $('.divNamapengirim').hide();
-                    }
 
                     $('[name="tanggal_agenda"]').attr('disabled', true);
                     $('#btnBatal').show();
@@ -428,7 +393,7 @@
             });
 
             $.ajax({
-                url: "surat_masuk/"+id+"/detail",
+                url: "sm_eksternal/"+id+"/detail",
                 type: "GET",
                 beforeSend: function(){
                     $('#imgLoader').show();
@@ -455,7 +420,7 @@
             });
 
             $.ajax({
-                url: "surat_masuk/"+id+"/unggah",
+                url: "sm_eksternal/"+id+"/unggah",
                 type: "GET",
                 beforeSend: function(){
                     $('#imgLoader').show();
@@ -478,32 +443,12 @@
             $('body').tooltip({selector: '[data-toggle="tooltip"]'});
             $('#btnBatal').hide();
             $('#imgLoader').hide();
-            $('.divNamapengirim').hide();
 
             $('#btnBatal').click(function(){
                 $('#frmSuratmasuk')[0].reset();
                 $('#frmSuratmasuk').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
-                $('.divNamapengirim').hide();
                 $('[name="tanggal_agenda"]').attr('disabled', false);
                 $('#btnBatal').hide();
-            });
-
-            $('[name="tipe_agenda"]').change(function(){
-                if($(this).val() == "E"){
-                    $('.divNamapengirim').show();
-                    $('#btnPengirim').hide();
-                    $('[name="pengirim"]').val("LAIN-LAIN");
-                    $('[name="nama_pengirim"]').val("");
-                    $('[name="id_pengirim"]').val("17");
-                }else{
-                    $('.divNamapengirim').hide();
-                    $('#btnPengirim').show();
-                    $('[name="pengirim"]').val("");
-                    $('[name="nama_pengirim"]').val("");
-                    $('[name="id_pengirim"]').val("");
-                }
-                $('#frmSuratmasuk').bootstrapValidator('revalidateField', 'pengirim');
-                $('#frmSuratmasuk').bootstrapValidator('revalidateField', 'nama_pengirim');
             });
 
     		var tgl_surat = $('#tanggal_surat').datepicker({
@@ -538,7 +483,7 @@
                 "serverSide": true,
                 "ordering": false,
                 "ajax": {
-                    "url": "{{ route('surat_masuk.data') }}",
+                    "url": "{{ route('sm_eksternal.data') }}",
                     "type": "GET"
                 },
                 "aoColumnDefs": [{
@@ -576,7 +521,7 @@
                 "serverSide": true,
                 "ordering": false,
                 "ajax": {
-                    "url": "{{ route('surat_masuk.klasifikasi') }}",
+                    "url": "{{ route('sm_eksternal.klasifikasi') }}",
                     "type": "GET"
                 },
                 "aoColumnDefs": [{
@@ -598,40 +543,6 @@
                 }]
             });
 
-            // TABLE PENGIRIM
-            var oTablePengirim = $('#tblPengirim').dataTable({
-                initComplete: function(){
-                    var api = this.api();
-                    $('#tblPengirim_filter input').off('.DT').on('keyup.DT', function(e){
-                        if(e.keyCode == 13){
-                            api.search(this.value).draw();
-                        }
-                    });
-                },
-                "processing": true,
-                "serverSide": true,
-                "ordering": false,
-                "ajax": {
-                    "url": "{{ route('surat_masuk.pengirim') }}",
-                    "type": "GET"
-                },
-                "aoColumnDefs": [{
-                    "aTargets": [0],
-                    "sWidth": "2%",
-                    "sClass": "text-center"
-                },{
-                    "aTargets": [1],
-                    "sWidth": "5%",
-                    "sClass": "text-center",
-                    "mRender": function( data, type, full) {
-                        return "<td><button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue btnPilihPengirim' data-toggle='tooltip' data-placement='top' title='Pilih Klasifikasi'><span class='fa fa-pencil'></span></button></td>";
-                    }
-                },{
-                    "aTargets": [3],
-                    "sWidth": "20%",
-                }]
-            });
-
             // TABLE TUJUAN
             var oTableTujuan = $('#tblTujuan').dataTable({
                 initComplete: function(){
@@ -646,7 +557,7 @@
                 "serverSide": true,
                 "ordering": false,
                 "ajax": {
-                    "url": "{{ route('surat_masuk.tujuan') }}",
+                    "url": "{{ route('sm_eksternal.tujuan') }}",
                     "type": "GET"
                 },
                 "aoColumnDefs": [{
@@ -682,28 +593,6 @@
                 return false;
             });
 
-            // TOMBOL PILIH BAGIAN
-            $('#tblPengirim tbody').on('click', '.btnPilihPengirim', function(){
-                var tr = $(this).closest('tr');
-                var index = oTablePengirim.fnGetPosition(tr[0]);
-                var idBagian = oTablePengirim.fnGetData(index)[1];
-                var namaBagian = oTablePengirim.fnGetData(index)[2];
-
-                if(idBagian == "17"){
-                    $('.divNamapengirim').show();
-                    $('[name="nama_pengirim"]').val("");
-                }else{
-                    $('.divNamapengirim').hide();
-                    $('[name="nama_pengirim"]').val(namaBagian);
-                }
-
-                $('[name="pengirim"]').val(namaBagian);
-                $('[name="id_pengirim"]').val(idBagian);
-                $('#frmSuratmasuk').bootstrapValidator('revalidateField', 'pengirim');
-                $('#modalPengirim').modal('hide');
-                return false;
-            });
-
             // TOMBOL PILIH TUJUAN
             $('#tblTujuan tbody').on('click', '.btnPilihTujuan', function(){
                 var tr = $(this).closest('tr');
@@ -719,10 +608,6 @@
             });
 
             $('#modalKlasifikasi').on('shown.bs.modal', function(e){
-                $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-            });
-
-            $('#modalPengirim').on('shown.bs.modal', function(e){
                 $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
             });
 
@@ -774,13 +659,6 @@
                             }
                         }
                     },
-                    pengirim: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Kolom harus diisi !'
-                            }
-                        }
-                    },
                     nama_pengirim: {
                         validators: {
                             notEmpty: {
@@ -807,10 +685,10 @@
                 e.preventDefault();
                 var id = $('[name="id_suratmasuk"]').val();
                 if(id == ""){
-                    url = "{{ route('surat_masuk.simpan') }}";
+                    url = "{{ route('sm_eksternal.simpan') }}";
                     type = "POST";
                 }else{
-                    url = "surat_masuk/"+id;
+                    url = "sm_eksternal/"+id;
                     type = "PUT";
                 }
 
@@ -841,7 +719,6 @@
                             swal('Gagal !', 'Data surat gagal disimpan.', 'error');
                         }
 
-                        $('.divNamapengirim').hide();
                         $('#btnBatal').hide();
                         $('#frmSuratmasuk')[0].reset();
                         $('#btnKlasifikasi').show();
@@ -852,11 +729,6 @@
                         $('#imgLoader').hide();
                     }
                 });
-
-                $('[name="id_suratmasuk"]').val("");
-                $('[name="id_klasifikasi"]').val("");
-                $('[name="id_pengirim"]').val("");
-                $('[name="id_tujuan"]').val("");
                 $('#frmSuratmasuk').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
             });
     	});	

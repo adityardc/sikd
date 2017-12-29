@@ -97,11 +97,8 @@ class coSuratkeluar extends Controller
     public function store(Request $request)
     {
         $thn = substr($request->tanggal_surat, 0, 4);
-        $getNumber = DB::table('tbl_surat_keluar')
-                        ->whereRaw('EXTRACT(YEAR from tanggal_surat) = '.$thn)
-                        ->whereRaw('id_bagian ='.Auth::user()->id_bagian)
-                        ->whereRaw('id_klasifikasi = '.$request->id_klas)
-                        ->orderBy('tanggal_surat', 'desc')->first();
+        $getNumber = DB::table('tbl_temp_surat_keluar')->where('tahun', $thn)->where('id_klasifikasi', $request->id_klas)->first();
+        
         $getSifat = DB::table('tbl_sifat_surat')->where('id_sifat_surat', $request->sifat_surat)->first();
 
         if(empty($request->tindasan)){
@@ -112,9 +109,20 @@ class coSuratkeluar extends Controller
 
         if($getNumber == NULL){
             $urut = 1;
+            DB::table('tbl_temp_surat_keluar')->insert([
+                'id_klasifikasi' => $request->id_klas,
+                'tahun' => $thn,
+                'nomor_urut' => $urut,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
         }else{
-            $urut = $getNumber->nomor;
+            $urut = $getNumber->nomor_urut;
             $urut += 1;
+            DB::table('tbl_temp_surat_keluar')->where('id_temp_surat_keluar', $getNumber->id_temp_surat_keluar)->update([
+                'nomor_urut' => $urut,
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
         }
 
         if($getSifat->kode_sifat == "RHS"){
@@ -137,6 +145,9 @@ class coSuratkeluar extends Controller
             'id_konseptor' => $request->id_konseptor,
             'tindasan' => $arrTindasan,
             'nomor_surat' => $noSurat,
+            'tipe_suratkeluar' => $request->tipe_suratkeluar,
+            'hak_akses' => Auth::user()->id_role,
+            'status_agenda' => "N",
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
@@ -159,7 +170,7 @@ class coSuratkeluar extends Controller
     public function edit($id)
     {
         $surat = DB::table('tbl_surat_keluar')
-                ->select('id_surat_keluar', 'id_klasifikasi', 'sd1','sd3', 'tanggal_surat','sifat_surat','id_tujuan', 'nama_bagian', 'nama_tujuan as tujuan_lain','perihal','id_konseptor','nama_karyawan')
+                ->select('id_surat_keluar', 'id_klasifikasi', 'sd1','sd3', 'tanggal_surat','sifat_surat','id_tujuan', 'nama_bagian', 'nama_tujuan as tujuan_lain','perihal','id_konseptor','nama_karyawan','tipe_suratkeluar')
                 ->join('tbl_child_klasifikasi', 'tbl_child_klasifikasi.id_trans', '=', 'tbl_surat_keluar.id_klasifikasi')
                 ->join('tbl_karyawan', 'tbl_karyawan.id_karyawan', '=', 'tbl_surat_keluar.id_konseptor')
                 ->join('tbl_bagian', 'tbl_bagian.id_bagian', '=', 'tbl_surat_keluar.id_tujuan')
@@ -176,6 +187,8 @@ class coSuratkeluar extends Controller
                 'nama_tujuan' => $request->tujuanLain,
                 'perihal' => $request->perihal,
                 'id_konseptor' => $request->id_konseptor,
+                'hak_akses' => Auth::user()->id_role,
+                'tipe_suratkeluar' => $request->tipe_suratkeluar,
                 'updated_at' => \Carbon\Carbon::now()
             ]);
         }else{
@@ -187,6 +200,8 @@ class coSuratkeluar extends Controller
                 'perihal' => $request->perihal,
                 'id_konseptor' => $request->id_konseptor,
                 'tindasan' => $arrTindasan,
+                'hak_akses' => Auth::user()->id_role,
+                'tipe_suratkeluar' => $request->tipe_suratkeluar,
                 'updated_at' => \Carbon\Carbon::now()
             ]);
         }

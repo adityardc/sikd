@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use DB;
 use DataTables;
 
-class coSuratmasuk extends Controller
+class coSm_eksternal extends Controller
 {
     public function index()
     {
     	$direktur = DB::table('tbl_bagian')->where('tindasan', 1)->where('grup_bagian', 0)->orderBy('id_bagian')->get();
         $bagian = DB::table('tbl_bagian')->where('tindasan', 1)->where('grup_bagian', 1)->orderBy('id_bagian')->get();
         $unitkerja = DB::table('tbl_bagian')->where('tindasan', 1)->where('grup_bagian', 2)->orderBy('id_bagian')->get();
-    	return view('surat_masuk', compact(['direktur','bagian','unitkerja']));
+    	return view('sm_eksternal', compact(['direktur','bagian','unitkerja']));
     }
 
     public function listSurat()
@@ -21,6 +21,8 @@ class coSuratmasuk extends Controller
         $listSurat = DB::table("tbl_surat_masuk")
         				->select('id_surat_masuk','nomor_agenda','nomor_surat','nama_pengirim','nama_bagian')
         				->join('tbl_bagian', 'tbl_surat_masuk.id_tujuan', '=', 'tbl_bagian.id_bagian')
+                        ->where('tipe_agenda', 'E')
+                        ->orderBy('nomor_agenda', 'desc')
         				->get();
         $no = 0;
         $data = array();
@@ -77,28 +79,10 @@ class coSuratmasuk extends Controller
         return DataTables::of($data)->escapeColumns([])->make(true);
     }
 
-    public function listPengirim()
-    {
-        $bagian = DB::table("tbl_bagian")->select('id_bagian','nama_bagian','kode_bagian')->get();
-        $no = 0;
-        $data = array();
-        foreach ($bagian as $list) {
-            $no++;
-            $row = array();
-            $row[] = $no;
-            $row[] = $list->id_bagian;
-            $row[] = $list->nama_bagian;
-            $row[] = $list->kode_bagian;
-            $data[] = $row;
-        }
-
-        return DataTables::of($data)->escapeColumns([])->make(true);
-    }
-
     public function store(Request $request)
     {
         $thn = substr($request->tanggal_agenda, 0, 4);
-        $getNumber = DB::table('tbl_surat_masuk')->orderBy('nomor_agenda', 'desc')->first();
+        $getNumber = DB::table('tbl_temp_surat_masuk')->where('tahun', $thn)->first();
 
         if(empty($request->tindasan)){
             $arrTindasan = "";
@@ -108,23 +92,35 @@ class coSuratmasuk extends Controller
 
         if($getNumber == NULL){
             $urut = 1;
+            DB::table('tbl_temp_surat_masuk')->insert([
+                'tahun' => $thn,
+                'nomor_urut' => $urut,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
         }else{
-            $urut = $getNumber->nomor_agenda;
+            $urut = $getNumber->nomor_urut;
             $urut += 1;
+            DB::table('tbl_temp_surat_masuk')->where('id_temp_surat_masuk', $getNumber->id_temp_surat_masuk)->update([
+                'nomor_urut' => $urut,
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
         }
 
         DB::table('tbl_surat_masuk')->insert([
-            'tipe_agenda' => $request->tipe_agenda,
+            'tipe_agenda' => "E",
             'tanggal_agenda' => $request->tanggal_agenda,
             'nomor_agenda' => $urut,
             'nomor_surat' => $request->nomor_surat,
             'tanggal_surat' => $request->tanggal_surat,
-            'id_pengirim' => $request->id_pengirim,
+            'id_pengirim' => "17",
             'nama_pengirim' => $request->nama_pengirim,
             'id_tujuan' => $request->id_tujuan,
             'perihal' => $request->perihal,
             'id_klasifikasi' => $request->id_klasifikasi,
             'tindasan' => $arrTindasan,
+            'id_surat_keluar' => 0,
+            'status_agenda_dir' => "N",
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
@@ -170,7 +166,6 @@ class coSuratmasuk extends Controller
                 'nomor_surat' => $request->nomor_surat,
                 'id_klasifikasi' => $request->id_klasifikasi,
                 'tanggal_surat' => $request->tanggal_surat,
-                'id_pengirim' => $request->id_pengirim,
                 'nama_pengirim' => $request->nama_pengirim,
                 'id_tujuan' => $request->id_tujuan,
                 'perihal' => $request->perihal,
@@ -182,7 +177,6 @@ class coSuratmasuk extends Controller
                 'nomor_surat' => $request->nomor_surat,
                 'id_klasifikasi' => $request->id_klasifikasi,
                 'tanggal_surat' => $request->tanggal_surat,
-                'id_pengirim' => $request->id_pengirim,
                 'nama_pengirim' => $request->nama_pengirim,
                 'id_tujuan' => $request->id_tujuan,
                 'perihal' => $request->perihal,

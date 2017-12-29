@@ -61,12 +61,12 @@
                                         <img src="{{ asset('assets/img/icons8-circled-user-male-skin-type-5.png') }}">
                                     </div>
                                     <section>
-                                        <h2><span class="profile"><span>David Stevenson</span></span></h2>
+                                        <h2><span class="profile"><span>{{ Auth::user()->name }}</span></span></h2>
                                     </section>
                                 </a>
                                 <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
-                                    <li class="username"><a>David Stevenson</a></li>
-                                    <li class="email"><a>David.Stevenson@live.com</a></li>
+                                    <li class="username"><a>{{ Auth::user()->name }}</a></li>
+                                    <li class="email"><a>{{ Auth::user()->email }}</a></li>
                                     <li>
                                         <div class="avatar-area">
                                             <img src="{{ asset('assets/img/icons8-circled-user-male-skin-type-5.png') }}" class="avatar">
@@ -103,7 +103,7 @@
                             <span class="menu-text">Beranda</span>
                         </a>
                     </li>
-                    <li class="{{ set_active_open(['bagian','jabatan','golongan','masakerja','pendidikan','hakakses','karyawan','pengguna','parentKlasifikasi','childKlasifikasi','jenis_surat','sifat_surat']) }}">
+                    <li class="{{ set_active_open(['bagian','jabatan','golongan','masakerja','pendidikan','hakakses','karyawan','pengguna','parentKlasifikasi','childKlasifikasi','jenis_surat','sifat_surat','disposisi']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-database"></i>
 
@@ -135,6 +135,9 @@
                             </li>
                             <li class="{{ set_active('jenis_surat') }}">
                                 <a href="{{ route('jenis_surat') }}"><span class="menu-text">Data Jenis Surat</span></a>
+                            </li>
+                            <li class="{{ set_active('disposisi') }}">
+                                <a href="{{ route('disposisi') }}"><span class="menu-text">Data Jenis Disposisi Direksi</span></a>
                             </li>
                             <li class="{{ set_active('sifat_surat') }}">
                                 <a href="{{ route('sifat_surat') }}"><span class="menu-text">Data Sifat Surat</span></a>
@@ -170,7 +173,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="{{ set_active_open(['surat_keluar','surat_masuk']) }}">
+                    <li class="{{ set_active_open(['surat_keluar','sm_eksternal','sm_internal']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-book"></i>
 
@@ -182,15 +185,18 @@
                         </a>
 
                         <ul class="submenu">
-                            <li class="{{ set_active('surat_masuk') }}">
-                                <a href="{{ route('surat_masuk') }}"><span class="menu-text">Surat Masuk</span></a>
+                            <li class="{{ set_active('sm_eksternal') }}">
+                                <a href="{{ route('sm_eksternal') }}"><span class="menu-text">Surat Masuk Eksternal</span></a>
+                            </li>
+                            <li class="{{ set_active('sm_internal') }}">
+                                <a href="{{ route('sm_internal') }}"><span class="menu-text">Surat Masuk Internal</span></a>
                             </li>
                             <li class="{{ set_active('surat_keluar') }}">
                                 <a href="{{ route('surat_keluar') }}"><span class="menu-text">Surat Keluar</span></a>
                             </li>
                         </ul>
                     </li>
-                    <li class="{{ set_active_open(['agenda_langsung']) }}">
+                    <li class="{{ set_active_open(['agenda_direksi']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-user-secret"></i>
 
@@ -202,11 +208,8 @@
                         </a>
 
                         <ul class="submenu">
-                            <li class="{{ set_active('agenda_langsung') }}">
-                                <a href="{{ route('agenda_langsung') }}"><span class="menu-text">Surat Masuk Langsung</span></a>
-                            </li>
-                            <li class="{{ set_active('bagian') }}">
-                                <a href="#"><span class="menu-text">Surat Masuk Sentral</span></a>
+                            <li class="{{ set_active('agenda_direksi') }}">
+                                <a href="{{ route('agenda_direksi') }}"><span class="menu-text">Surat Masuk Direksi</span></a>
                             </li>
                             <li class="{{ set_active('jabatan') }}">
                                 <a href="#"><span class="menu-text">Disposisi Direksi</span></a>

@@ -56,11 +56,14 @@
                                                     <i class="form-control-feedback" data-bv-field="kode_klasifikasi" style="display: none;"></i>
                                                 </div>  
                                             </div>
-                                            <div class="col-md-8" style="display: none;">
+                                            <div class="col-md-8">
                                                 <div class="form-group">
-                                                    <label for="id_klas">id klasifikasi</label>
-                                                    <input type="text" class="form-control" id="id_klas" name="id_klas" data-bv-field="id_klas" readonly="true">
-                                                    <i class="form-control-feedback" data-bv-field="id_klas" style="display: none;"></i>
+                                                    <label for="tipe_suratkeluar">Tipe Surat Keluar</label>
+                                                    <select class="form-control" name="tipe_suratkeluar" id="tipe_suratkeluar">
+                                                        <option value="I">INTERNAL</option>
+                                                        <option value="E">EKSTERNAL</option>
+                                                    </select>
+                                                    <i class="form-control-feedback" data-bv-field="tipe_suratkeluar" style="display: none;"></i>
                                                 </div>  
                                             </div>
                                         </div>
@@ -187,6 +190,7 @@
                                             <input type="text" name="id_tujuan" class="form-control" style="display: none;">
                                             <input type="text" name="id_konseptor" class="form-control" data-bv-field="id_konseptor" style="display: none;">
                                             <input type="text" name="kd_bagian" class="form-control" data-bv-field="kd_bagian" style="display: none;" value="{{ $kdBagian }}">
+                                            <input type="text" class="form-control" id="id_klas" name="id_klas" data-bv-field="id_klas" readonly="true" style="display: none;">
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12" id="alertNotif" style="display: none;"></div>
@@ -400,12 +404,15 @@
                     $('[name="id_suratkeluar"]').val(data.id_surat_keluar);
                     $('[name="id_tujuan"]').val(data.id_tujuan);
                     $('[name="id_konseptor"]').val(data.id_konseptor);
+                    $('[name="tipe_suratkeluar"]').val(data.tipe_suratkeluar);
                     $('#btnKlasifikasi').hide();
                     $('.divSifat').hide();
 
-                    if(data.id_tujuan == "17"){
+                    if(data.tipe_suratkeluar == "E"){
+                        $('#btnTujuan').hide();
                         $('.divTujuanlain').show();
                     }else{
+                        $('#btnTujuan').show();
                         $('.divTujuanlain').hide();
                     }
 
@@ -489,6 +496,23 @@
                 $('.divTujuanlain').hide();
                 $('.divSifat').show();
                 $('#btnBatal').hide();
+            });
+
+            $('#tipe_suratkeluar').change(function(){
+                var valTipe = $(this).val();
+                if(valTipe == "E"){
+                    $('.divTujuanlain').show();
+                    $('#btnTujuan').hide();
+                    $('[name="id_tujuan"]').val("17");
+                    $('[name="nama_tujuan"]').val("LAIN-LAIN");
+                    $('[NAME="tujuanLain"]').val("");
+                }else{
+                    $('.divTujuanlain').hide();
+                    $('#btnTujuan').show();
+                    $('[name="id_tujuan"]').val("");
+                    $('[name="nama_tujuan"]').val("");
+                }
+                $('#frmSuratkeluar').bootstrapValidator('revalidateField', 'nama_tujuan');
             });
 
             $('#file_surat').change(function(){
@@ -666,15 +690,8 @@
                 var idBagian = oTableBagian.fnGetData(index)[1];
                 var namaBagian = oTableBagian.fnGetData(index)[2];
 
-                if(idBagian == "17"){
-                    $('.divTujuanlain').show();
-                    $('[name="tujuanLain"]').val("");
-                }else{
-                    $('.divTujuanlain').hide();
-                    $('[name="tujuanLain"]').val(namaBagian);
-                }
-
                 $('[name="nama_tujuan"]').val(namaBagian);
+                $('[name="tujuanLain"]').val(namaBagian);
                 $('[name="id_tujuan"]').val(idBagian);
                 $('#frmSuratkeluar').bootstrapValidator('revalidateField', 'nama_tujuan');
                 $('#modalTujuan').modal('hide');
@@ -801,7 +818,6 @@
                             swal('Gagal !', 'Data surat gagal disimpan.', 'error');
                         }
 
-                        $('.divTujuanlain').hide();
                         $('#btnBatal').hide();
                         $('#frmSuratkeluar')[0].reset();
                         $('#btnKlasifikasi').show();
@@ -867,7 +883,6 @@
                             swal('Gagal !', 'Data surat gagal diunggah.', 'error');
                         }
 
-                        $('.divTujuanlain').hide();
                         $('#btnBatal').hide();
                         $('#frmSuratkeluar')[0].reset();
                         $('#btnKlasifikasi').show();

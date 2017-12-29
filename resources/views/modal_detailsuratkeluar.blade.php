@@ -33,7 +33,7 @@
     		<td>{{ $detail->nama_karyawan }}</td>
     	</tr>
     	<tr>
-    		<td>Pembuat</td>
+    		<td>Pembuat Nomor</td>
     		<td>:</td>
     		<td>{{ $detail->name }}</td>
     	</tr>

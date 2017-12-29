@@ -52,6 +52,14 @@ Route::get('/masakerja/{id?}/edit', 'coMasakerja@edit');
 Route::put('/masakerja/{id?}', 'coMasakerja@update');
 Route::delete('/masakerja/{id?}', 'coMasakerja@destroy');
 
+// Route modul disposisi direksi
+Route::get('/disposisi', 'coDisposisi_direksi@index')->middleware('auth', 'cek_role')->name('disposisi');
+Route::get('/disposisi/data', 'coDisposisi_direksi@listData')->middleware('auth', 'cek_role')->name('disposisi.data');
+Route::post('/disposisi/store', 'coDisposisi_direksi@store')->name('disposisi.simpan');
+Route::get('/disposisi/{id?}/edit', 'coDisposisi_direksi@edit');
+Route::put('/disposisi/{id?}', 'coDisposisi_direksi@update');
+Route::delete('/disposisi/{id?}', 'coDisposisi_direksi@destroy');
+
 // Route modul masa pendidikan
 Route::get('/pendidikan', 'coPendidikan@index')->middleware('auth', 'cek_role')->name('pendidikan');
 Route::get('/pendidikan/data', 'coPendidikan@listData')->middleware('auth', 'cek_role')->name('pendidikan.data');
@@ -116,11 +124,11 @@ Route::get('/childKlasifikasi', 'coChild@index')->middleware('auth', 'cek_role')
 Route::get('/childKlasifikasi/data', 'coChild@listData')->middleware('auth', 'cek_role')->name('childKlasifikasi.data');
 
 // Route modul surat keluar
-Route::get('/surat_keluar', 'coSuratkeluar@index')->middleware('auth', 'cek_role')->name('surat_keluar');
-Route::get('/surat_keluar/data', 'coSuratkeluar@listSurat')->middleware('auth', 'cek_role')->name('surat_keluar.data');
-Route::get('/surat_keluar/data/klasifikasi', 'coSuratkeluar@listKlasifikasi')->middleware('auth', 'cek_role')->name('surat_keluar.klasifikasi');
-Route::get('/surat_keluar/data/bagian', 'coSuratkeluar@listBagian')->middleware('auth', 'cek_role')->name('surat_keluar.bagian');
-Route::get('/surat_keluar/data/konseptor', 'coSuratkeluar@listKonseptor')->middleware('auth', 'cek_role')->name('surat_keluar.konseptor');
+Route::get('/surat_keluar', 'coSuratkeluar@index')->middleware('auth')->name('surat_keluar');
+Route::get('/surat_keluar/data', 'coSuratkeluar@listSurat')->middleware('auth')->name('surat_keluar.data');
+Route::get('/surat_keluar/data/klasifikasi', 'coSuratkeluar@listKlasifikasi')->middleware('auth')->name('surat_keluar.klasifikasi');
+Route::get('/surat_keluar/data/bagian', 'coSuratkeluar@listBagian')->middleware('auth')->name('surat_keluar.bagian');
+Route::get('/surat_keluar/data/konseptor', 'coSuratkeluar@listKonseptor')->middleware('auth')->name('surat_keluar.konseptor');
 Route::get('/surat_keluar/{id?}/detail', 'coSuratkeluar@detailSurat');
 Route::post('/surat_keluar/store', 'coSuratkeluar@store')->name('surat_keluar.simpan');
 Route::get('/surat_keluar/{id?}/edit', 'coSuratkeluar@edit');
@@ -129,25 +137,30 @@ Route::get('/surat_keluar/{id?}/unggah', 'coSuratkeluar@unggah_surat');
 Route::post('/surat_keluar/unggah_surat/{id?}', 'coSuratkeluar@updateSurat');
 Route::delete('/surat_keluar/{id?}', 'coSuratkeluar@destroy');
 
-// Route modul surat masuk
-Route::get('/surat_masuk', 'coSuratmasuk@index')->middleware('auth', 'cek_role')->name('surat_masuk');
-Route::get('/surat_masuk/data', 'coSuratmasuk@listSurat')->middleware('auth', 'cek_role')->name('surat_masuk.data');
-Route::get('/surat_masuk/data/klasifikasi', 'coSuratmasuk@listKlasifikasi')->middleware('auth', 'cek_role')->name('surat_masuk.klasifikasi');
-Route::get('/surat_masuk/data/tujuan', 'coSuratmasuk@listTujuan')->middleware('auth', 'cek_role')->name('surat_masuk.tujuan');
-Route::get('/surat_masuk/data/pengirim', 'coSuratmasuk@listPengirim')->middleware('auth', 'cek_role')->name('surat_masuk.pengirim');
-Route::post('/surat_masuk/store', 'coSuratmasuk@store')->name('surat_masuk.simpan');
-Route::get('/surat_masuk/{id?}/detail', 'coSuratmasuk@detailSurat');
-Route::get('/surat_masuk/{id?}/unggah', 'coSuratmasuk@unggah_surat');
-Route::get('/surat_masuk/{id?}/edit', 'coSuratmasuk@edit');
-Route::put('/surat_masuk/{id?}', 'coSuratmasuk@update');
+// Route modul surat masuk eksternal
+Route::get('/sm_eksternal', 'coSm_eksternal@index')->middleware('auth', 'cek_role')->name('sm_eksternal');
+Route::get('/sm_eksternal/data', 'coSm_eksternal@listSurat')->middleware('auth', 'cek_role')->name('sm_eksternal.data');
+Route::get('/sm_eksternal/data/klasifikasi', 'coSm_eksternal@listKlasifikasi')->middleware('auth', 'cek_role')->name('sm_eksternal.klasifikasi');
+Route::get('/sm_eksternal/data/tujuan', 'coSm_eksternal@listTujuan')->middleware('auth', 'cek_role')->name('sm_eksternal.tujuan');
+Route::post('/sm_eksternal/store', 'coSm_eksternal@store')->name('sm_eksternal.simpan');
+Route::get('/sm_eksternal/{id?}/detail', 'coSm_eksternal@detailSurat');
+Route::get('/sm_eksternal/{id?}/unggah', 'coSm_eksternal@unggah_surat');
+Route::get('/sm_eksternal/{id?}/edit', 'coSm_eksternal@edit');
+Route::put('/sm_eksternal/{id?}', 'coSm_eksternal@update');
 
-// Route modul agenda direksi langsung
-Route::get('/agenda_langsung', 'coAgenda_langsung@index')->middleware('auth', 'cek_role')->name('agenda_langsung');
-Route::get('/agenda_langsung/data', 'coAgenda_langsung@listAgenda')->middleware('auth', 'cek_role')->name('agenda_langsung.data');
-Route::post('/agenda_langsung/store', 'coAgenda_langsung@store')->name('agenda_langsung.simpan');
-Route::put('/agenda_langsung/{id?}', 'coAgenda_langsung@update');
-Route::get('/agenda_langsung/{id?}/edit', 'coAgenda_langsung@edit');
-Route::get('/agenda_langsung/{id?}/unggah', 'coAgenda_langsung@unggah_disposisi');
-Route::get('/agenda_langsung/{id?}/detail', 'coAgenda_langsung@detailAgenda');
+// Route modul surat masuk internal
+Route::get('/sm_internal', 'coSm_internal@index')->middleware('auth', 'cek_role')->name('sm_internal');
+Route::get('/sm_internal/data', 'coSm_internal@listSurat_internal')->middleware('auth', 'cek_role')->name('sm_internal.data');
+Route::get('/sm_internal/sentral', 'coSm_internal@listSurat_sentral')->middleware('auth', 'cek_role')->name('sm_internal.sentral');
+Route::get('/sm_internal/{id?}/detail', 'coSm_internal@detailSurat');
+Route::get('/sm_internal/{id?}/agenda', 'coSm_internal@agenda_sentral');
+Route::post('/sm_internal/store', 'coSm_internal@store')->name('sm_internal.simpan');
+
+// Route modul agenda direksi
+Route::get('/agenda_direksi', 'coAgenda_direksi@index')->middleware('auth', 'cek_role')->name('agenda_direksi');
+Route::get('/agenda_direksi/data', 'coAgenda_direksi@listSentral')->middleware('auth', 'cek_role')->name('agenda_direksi.data');
+Route::get('/agenda_direksi/data_agenda', 'coAgenda_direksi@listAgenda')->middleware('auth', 'cek_role')->name('agenda_direksi.agenda');
+Route::get('/agenda_direksi/{id?}/agenda', 'coAgenda_direksi@agenda_direksi');
+Route::post('/agenda_direksi/store', 'coAgenda_direksi@store')->name('agenda_direksi.simpan');
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -146,7 +146,7 @@ $("[data-toggle=tooltip]")
     });
 
 InitiateSideMenu();
-// InitiateSettings();
+InitiateSettings();
 // InitiateWidgets();
 
 function InitiateSideMenu() {
@@ -328,7 +328,7 @@ function InitiateSettings() {
     //         if (!$(".page-sidebar").hasClass("menu-compact")) {
     //             var position = (readCookie("rtl-support") || location.pathname == "/index-rtl-fa.html" || location.pathname == "index-rtl-ar.html") ? 'right' : 'left';
                 $('.sidebar-menu').slimscroll({
-                    height: $(window).height() - 90,
+                    height: $(window).height() - 50,
                     position: 'left',
                     size: '3px',
                     color: themeprimary

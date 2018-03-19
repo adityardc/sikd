@@ -8,10 +8,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>PTPN IX</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/x-icon">
 </head>
 <body>
     <div id="app">
@@ -29,7 +30,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        Sistem Informasi Kesekretariatan - PTPN IX
                     </a>
                 </div>
 
@@ -108,7 +109,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <div class="col-md-6 col-md-offset-4">
                                         <div class="checkbox">
                                             <label>
@@ -116,7 +117,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group">
                                     <div class="col-md-8 col-md-offset-4">

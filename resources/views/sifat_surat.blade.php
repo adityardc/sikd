@@ -18,52 +18,59 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-lg-6 col-sm-6 col-xs-12">
+		<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
 			<div class="widget">
 				<div class="widget-header bordered-bottom bordered-palegreen">
                     <span class="widget-caption">Form Sifat Surat</span>
                 </div>
                 <div class="widget-body">
-                	<div id="horizontal-form">
-                		<form class="form-horizontal bv-form" role="form" id="frmSifatsurat" novalidate="novalidate">
-                            {{ csrf_field() }} {{ method_field('POST') }}
-                			<div class="form-group">
-                                <label for="nama_sifat" class="col-sm-3 control-label no-padding-right">Nama Sifat</label>
-                                <div class="col-sm-9">
+                	<form class="bv-form" role="form" id="frmSifatsurat" novalidate="novalidate">
+                        {{ csrf_field() }} {{ method_field('POST') }}
+                        <div class="row">
+                            <div class="col-lg-5 col-sm-5 col-md-5 col-xs-12">
+                                <div class="form-group">
+                                    <label for="nama_sifat">Nama Sifat</label>
                                     <input type="text" class="form-control" name="nama_sifat" id="nama_sifat" data-bv-field="nama_sifat" maxlength="20" onkeyup="upNama()" autofocus>
                                     <i class="form-control-feedback" data-bv-field="nama_sifat" style="display: none;"></i>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="kode_sifat" class="col-sm-3 control-label no-padding-right">Kode Sifat</label>
-                                <div class="col-sm-3">
+                            <div class="col-lg-3 col-sm-3 col-md-3 col-xs-12">
+                                <div class="form-group">
+                                    <label for="kode_sifat">Kode Sifat</label>
                                     <input type="text" class="form-control" name="kode_sifat" id="kode_sifat" data-bv-field="kode_sifat" maxlength="5" onkeyup="upKode()">
                                     <i class="form-control-feedback" data-bv-field="kode_sifat" style="display: none;"></i>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="deskripsi" class="col-sm-3 control-label no-padding-right">Deskripsi</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control" rows="3" id="deskripsi" name="deskripsi" onkeyup="upDeskripsi()" maxlength="150"></textarea>
-                                    <i class="form-control-feedback" data-bv-field="deskripsi" style="display: none;"></i>
+                            <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+                                <div class="form-group">
+                                    <label for="status_sifat">Status Sifat</label>
+                                    <select class="form-control" name="status_sifat" id="status_sifat">
+                                        <option value="Y">AKTIF</option>
+                                        <option value="N">TIDAK AKTIF</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-3 col-sm-9">
-                                    <button type="submit" class="btn btn-palegreen" id="btnSimpan">Simpan</button>
-                                    <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
-                                    <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
-                                    <input type="text" name="id_sifat" id="id_sifat" class="form-control" style="display: none;">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12" id="alertNotif" style="display: none;"></div>
-                            </div>
-                		</form>
-                	</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="deskripsi">Deskripsi</label>
+                            <textarea class="form-control" rows="3" id="deskripsi" name="deskripsi" onkeyup="upDeskripsi()" maxlength="150"></textarea>
+                            <i class="form-control-feedback" data-bv-field="deskripsi" style="display: none;"></i>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-palegreen" id="btnSimpan">Simpan</button>
+                            <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
+                            <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
+                            <input type="text" name="id_sifat" id="id_sifat" class="form-control" style="display: none;">
+                        </div>
+                    </form>
                 </div>
 			</div>
 		</div>
+        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+            <div class="form-group">
+                <div id="alertNotif" style="display: none;"></div>
+            </div>
+        </div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12 col-sm-12 col-xs-12">
@@ -75,11 +82,11 @@
                 	<table class="table bordered-palegreen table-striped table-bordered table-hover responsive" id="tblSifat">
                 		<thead class="bordered-palegreen">
                 			<tr>
-	                			<th class="text-center col-md-1">#</th>
-	                			<th class="text-center col-md-2">Nama Jenis Surat</th>
+	                			<th class="text-center">#</th>
+	                			<th class="text-center">Nama Jenis Surat</th>
 	                			<th class="text-center">Deskripsi</th>
-	                			<th class="text-center col-md-1">Kode</th>
-	                			<th class="text-center col-md-1">Aksi</th>
+	                			<th class="text-center">Kode</th>
+	                			<th class="text-center">Aksi</th>
 	                		</tr>
                 		</thead>
                         <tbody></tbody>
@@ -141,6 +148,7 @@
                     $('[name="nama_sifat"]').val(data.nama_sifat);
                     $('[name="kode_sifat"]').val(data.kode_sifat);
                     $('[name="deskripsi"]').val(data.deskripsi);
+                    $('[name="status_sifat"]').val(data.status_sifat);
                     $('[name="id_sifat"]').val(data.id_sifat_surat);
                     $('#btnBatal').show();
                     $('[name="nama_sifat"]').focus();
@@ -153,52 +161,6 @@
                 }
             });
             return false;
-        }
-
-        // Function ketika tombol hapus
-        function deleteData(id){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            swal({
-                title: "Konfirmasi !",
-                text: "Anda yakin menghapus data sifat surat ini ?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes !'
-            }).then(function(){
-                $.ajax({
-                    url: "sifat_surat/"+id,
-                    type: "DELETE",
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#imgLoader').show();
-                    },
-                    success:function(response){
-                        if(response.status == 3){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil dihapus.'];
-                        }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal dihapus.'];
-                        }
-
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_sifat').focus();
-                        $('#btnBatal').hide();
-                        oTable.ajax.reload();
-                    },
-                    complete: function(){
-                        $('#imgLoader').hide();
-                    }
-                });
-            }).catch(swal.noop);
         }
 
         $(document).ready(function(){
@@ -282,6 +244,10 @@
                         }
                     }
                 }
+            }).on('success.field.bv', function(e, data){
+                var $parent = data.element.parents('.form-group');
+                $parent.removeClass('has-success');
+                $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]').hide();
             }).on('success.form.bv', function(e){
                 e.preventDefault();
                 var id = $('#id_sifat').val();
@@ -314,6 +280,8 @@
                         $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
                             $('#alertNotif').slideUp(500);
                         });
+
+                        $('#frmSifatsurat')[0].reset();
                         $('#nama_sifat').focus();
                         $('#btnBatal').hide();
                         oTable.ajax.reload();
@@ -322,7 +290,6 @@
                         $('#imgLoader').hide();
                     }
                 });
-                $('#id_sifat').val("");
                 $('#frmSifatsurat').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
             });
         });

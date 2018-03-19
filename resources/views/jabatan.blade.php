@@ -18,38 +18,45 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-lg-8 col-sm-8 col-xs-12">
+		<div class="col-lg-6 col-sm-6 col-xs-12 col-md-6">
 			<div class="widget">
 				<div class="widget-header bordered-bottom bordered-azure">
                     <span class="widget-caption">Form Jabatan</span>
                 </div>
                 <div class="widget-body">
-                	<div id="horizontal-form">
-                		<form class="form-horizontal" role="form" id="frmJabatan" novalidate="novalidate">
-                            {{ csrf_field() }} {{ method_field('POST') }}
-                			<div class="form-group">
-                                <label for="nama_jabatan" class="col-sm-2 control-label no-padding-right">Nama Jabatan</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="nama_jabatan" id="nama_jabatan" onkeyup="upNama()" autofocus>
-                                    <i class="form-control-feedback" style="display: none;"></i>
+                	<form class="bv-form" role="form" id="frmJabatan" novalidate="novalidate">
+                        {{ csrf_field() }} {{ method_field('POST') }}
+                        <div class="form-group">
+                            <label for="nama_jabatan">Nama Jabatan</label>
+                            <input type="text" class="form-control" name="nama_jabatan" id="nama_jabatan" maxlength="100" onkeyup="upNama()" autofocus>
+                            <i class="form-control-feedback" style="display: none;"></i>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
+                                <div class="form-group">
+                                    <label for="status_jabatan">Status Jabatan</label>
+                                    <select class="form-control" name="status_jabatan" id="status_jabatan">
+                                        <option value="Y">AKTIF</option>
+                                        <option value="N">TIDAK AKTIF</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-azure" id="btnSimpan">Simpan</button>
-                                    <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
-                                    <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
-                                    <input type="text" name="id_jabatan" id="id_jabatan" class="form-control" style="display: none;">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12" id="alertNotif" style="display: none;"></div>
-                            </div>
-                		</form>
-                	</div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-azure" id="btnSimpan">Simpan</button>
+                            <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
+                            <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
+                            <input type="text" name="id_jabatan" id="id_jabatan" class="form-control" style="display: none;">
+                        </div>
+                    </form>
                 </div>
 			</div>
 		</div>
+        <div class="col-lg-6 col-sm-6 col-xs-12 col-md-6">
+            <div class="form-group">
+                <div id="alertNotif" style="display: none;"></div>
+            </div>
+        </div>
 	</div>
     <div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12">
@@ -61,9 +68,9 @@
                     <table class="table bordered-azure table-striped table-bordered table-hover responsive" id="tblJabatan">
                         <thead class="bordered-azure">
                             <tr>
-                                <th class="text-center col-md-1"">#</th>
+                                <th class="text-center">#</th>
                                 <th class="text-center">Nama Jabatan</th>
-                                <th class="text-center col-md-1">Aksi</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -111,6 +118,7 @@
                 success: function(data){
                     $('#frmJabatan').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
                     $('#nama_jabatan').val(data.nama_jabatan);
+                    $('#status_jabatan').val(data.status_jabatan);
                     $('#id_jabatan').val(data.id_jabatan);
                     $('#btnBatal').show();
                     $('#nama_jabatan').focus();
@@ -123,52 +131,6 @@
                 }
             });
             return false;
-        }
-
-        // Function ketika tombol hapus
-        function deleteData(id){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            swal({
-                title: "Konfirmasi !",
-                text: "Anda yakin menghapus data jabatan ini ?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes !'
-            }).then(function(){
-                $.ajax({
-                    url: "jabatan/"+id,
-                    type: "DELETE",
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#imgLoader').show();
-                    },
-                    success:function(response){
-                        if(response.status == 3){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil dihapus.'];
-                        }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal dihapus.'];
-                        }
-
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_jabatan').focus();
-                        $('#btnBatal').hide();
-                        oTable.ajax.reload();
-                    },
-                    complete: function(){
-                        $('#imgLoader').hide();
-                    }
-                });
-            }).catch(swal.noop);
         }
 
         $(document).ready(function(){
@@ -197,10 +159,12 @@
                     "url": "{{ route('jabatan.data') }}",
                     "type": "GET"
                 },
+                "ordering": false,
                 "columnDefs": [
                     {
                         className: "text-center",
-                        targets: [0,2]
+                        targets: [0,2],
+                        width: "3%"
                     },
                     {
                         orderable: false,
@@ -221,10 +185,18 @@
                         validators: {
                             notEmpty: {
                                 message: 'Kolom harus diisi !'
+                            },
+                            stringLength: {
+                                max: 100,
+                                message: 'Maksimal 100 karakter yang diperbolehkan'
                             }
                         }
                     }
                 }
+            }).on('success.field.bv', function(e, data){
+                var $parent = data.element.parents('.form-group');
+                $parent.removeClass('has-success');
+                $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]').hide();
             }).on('success.form.bv', function(e){
                 e.preventDefault();
                 var id = $('#id_jabatan').val();
@@ -257,6 +229,8 @@
                         $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
                             $('#alertNotif').slideUp(500);
                         });
+
+                        $('#frmJabatan')[0].reset();
                         $('#nama_jabatan').focus();
                         $('#btnBatal').hide();
                         oTable.ajax.reload();

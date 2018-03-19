@@ -21,7 +21,7 @@
                         </div>
                         <div class="databox-right">
                             <span class="databox-number themesecondary">28</span>
-                            <div class="databox-text darkgray">SURAT MASUK</div>
+                            <div class="databox-text darkgray">SURAT MASUK INTERNAL</div>
                             <div class="databox-stat themesecondary radius-bordered">
                                 <i class="stat-icon icon-lg fa fa-tasks"></i>
                             </div>
@@ -37,7 +37,7 @@
                         </div>
                         <div class="databox-right">
                             <span class="databox-number themethirdcolor">5</span>
-                            <div class="databox-text darkgray">SURAT KELUAR</div>
+                            <div class="databox-text darkgray">SURAT MASUK EKSTERNAL</div>
                             <div class="databox-stat themethirdcolor radius-bordered">
                                 <i class="stat-icon  icon-lg fa fa-envelope-o"></i>
                             </div>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="databox-right">
                             <span class="databox-number themeprimary">92</span>
-                            <div class="databox-text darkgray">SOFTCOPY SURAT KELUAR</div>
+                            <div class="databox-text darkgray">SURAT KELUAR</div>
                             <div class="databox-state bg-themeprimary">
                                 <i class="fa fa-check"></i>
                             </div>
@@ -81,6 +81,127 @@
     </div>
 
     <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="orders-container">
+                <div class="orders-header">
+                    <h6>Laporan Persuratan</h6>
+                </div>
+                <ul class="orders-list">
+                    <li class="order-item">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 item-left">
+                                <div class="item-booker">Surat Masuk Langsung</div>
+                                <div class="item-time">
+                                    <span>Surat masuk langsung ke bagian/unitkerja.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="item-more" href="{{ route('lap_surat_masuk_langsung') }}">
+                             <i class="fa fa-camera-retro"></i> 
+                        </a>
+                    </li>
+                    <li class="order-item top">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 item-left">
+                                <div class="item-booker">Surat Masuk Disposisi Direksi</div>
+                                <div class="item-time">
+                                    <span>Surat masuk ke bagian dari disposisi direksi.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="item-more" href="{{ route('lap_surat_masuk_disposisi') }}">
+                            <i></i>
+                        </a>
+                    </li>
+                    <li class="order-item">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 item-left">
+                                <div class="item-booker">Surat Masuk Tindasan</div>
+                                <div class="item-time">
+                                    <span>Surat masuk ke bagian dari tindasan surat keluar.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="item-more" href="{{ route('lap_surat_masuk_tindasan') }}">
+                            <i></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="orders-container">
+                <div class="orders-header">
+                    <h6>Laporan Agenda Sentral Kantor Direksi</h6>
+                </div>
+                <ul class="orders-list">
+                    <li class="order-item">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 item-left">
+                                <div class="item-booker">Agenda Surat Masuk Internal - Sentral</div>
+                                <div class="item-time">
+                                    <span>Agenda sentral internal kantor direksi.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="item-more" href="{{ route('lap_agenda_sentral_int') }}">
+                             <i class="fa fa-camera-retro"></i> 
+                        </a>
+                    </li>
+                    <li class="order-item top">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 item-left">
+                                <div class="item-booker">Agenda Surat Masuk Eksternal - Sentral</div>
+                                <div class="item-time">
+                                    <span>Agenda sentral eksternal kantor direksi.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="item-more" href="{{ route('lap_agenda_sentral_eks') }}">
+                            <i></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="orders-container">
+                <div class="orders-header">
+                    <h6>Laporan Disposisi Direksi</h6>
+                </div>
+                <ul class="orders-list">
+                    <li class="order-item">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 item-left">
+                                <div class="item-booker">Disposisi Surat Masuk Direksi</div>
+                                <div class="item-time">
+                                    <span>Disposisi surat masuk direksi.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="item-more" href="{{ route('lap_disposisi_dir_sm') }}">
+                             <i class="fa fa-camera-retro"></i> 
+                        </a>
+                    </li>
+                    <li class="order-item top">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 item-left">
+                                <div class="item-booker">Disposisi Surat Keluar Direksi</div>
+                                <div class="item-time">
+                                    <span>Disposisi surat keluar direksi.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="item-more" href="{{ route('lap_disposisi_dir_sk') }}">
+                            <i></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-xs-12 col-md-12">
             <div class="well with-header with-footer">
                 <div class="header bg-palegreen">
@@ -100,19 +221,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="text-center">
-                            <td>1</td>
-                            <td class="text-left">Sekretaris Perusahaan</td>
-                            <td>{{ $jml_90 }}</td>
-                            <td><span class="red">{{ $upload_90 }}</span></td>
-                            <td>{{ $prg_90 }} %</td>
-                        </tr>
-                        <tr class="text-center">
-                            <td>2</td>
-                            <td class="text-left">Satuan Pengawas Internal</td>
-                            <td>{{ $jml_91 }}</td>
-                            <td><span class="red">{{ $upload_91 }}</span></td>
-                            <td>{{ $prg_91 }} %</td>
+                        <tr>
+                            <td colspan="5" class="text-center"><span class="label label-success"><h5>TABEL MASIH DALAM TAHAP PENGEMBANGAN</h5></span></td>
                         </tr>
                     </tbody>
                 </table>

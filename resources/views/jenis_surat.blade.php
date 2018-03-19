@@ -18,52 +18,57 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-lg-6 col-sm-6 col-xs-12">
+		<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
 			<div class="widget">
 				<div class="widget-header bordered-bottom bordered-danger">
                     <span class="widget-caption">Form Jenis Surat Direksi</span>
                 </div>
                 <div class="widget-body">
-                	<div id="horizontal-form">
-                		<form class="form-horizontal bv-form" role="form" id="frmJenissurat" novalidate="novalidate">
-                            {{ csrf_field() }} {{ method_field('POST') }}
-                			<div class="form-group">
-                                <label for="nama_jenis" class="col-sm-3 control-label no-padding-right">Nama Jenis</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="nama_jenis" id="nama_jenis" data-bv-field="nama_jenis" maxlength="20" onkeyup="upNama()" autofocus>
-                                    <i class="form-control-feedback" data-bv-field="nama_jenis" style="display: none;"></i>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="kode_jenis" class="col-sm-3 control-label no-padding-right">Kode Jenis</label>
-                                <div class="col-sm-3">
+                	<form class="bv-form" role="form" id="frmJenissurat" novalidate="novalidate">
+                        {{ csrf_field() }} {{ method_field('POST') }}
+                        <div class="form-group">
+                            <label for="nama_jenis">Nama Jenis</label>
+                            <input type="text" class="form-control" name="nama_jenis" id="nama_jenis" data-bv-field="nama_jenis" maxlength="20" onkeyup="upNama()" autofocus>
+                            <i class="form-control-feedback" data-bv-field="nama_jenis" style="display: none;"></i>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="kode_jenis">Kode Jenis</label>
                                     <input type="text" class="form-control" name="kode_jenis" id="kode_jenis" data-bv-field="nama_jenis" maxlength="5" onkeyup="upKode()">
                                     <i class="form-control-feedback" data-bv-field="kode_jenis" style="display: none;"></i>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="deskripsi" class="col-sm-3 control-label no-padding-right">Deskripsi</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control" rows="3" id="deskripsi" name="deskripsi" onkeyup="upDeskripsi()" maxlength="150"></textarea>
-                                    <i class="form-control-feedback" data-bv-field="deskripsi" style="display: none;"></i>
+                            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="status_jenis">Status Jenis Surat</label>
+                                    <select class="form-control" name="status_jenis" id="status_jenis">
+                                        <option value="Y">AKTIF</option>
+                                        <option value="N">TIDAK AKTIF</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-3 col-sm-9">
-                                    <button type="submit" class="btn btn-danger" id="btnSimpan">Simpan</button>
-                                    <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
-                                    <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
-                                    <input type="text" name="id_jenis" id="id_jenis" class="form-control" style="display: none;">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12" id="alertNotif" style="display: none;"></div>
-                            </div>
-                		</form>
-                	</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="deskripsi">Deskripsi</label>
+                            <textarea class="form-control" rows="3" id="deskripsi" name="deskripsi" onkeyup="upDeskripsi()" maxlength="150"></textarea>
+                            <i class="form-control-feedback" data-bv-field="deskripsi" style="display: none;"></i>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger" id="btnSimpan">Simpan</button>
+                            <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
+                            <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
+                            <input type="text" name="id_jenis" id="id_jenis" class="form-control" style="display: none;">
+                        </div>
+                    </form>
                 </div>
 			</div>
 		</div>
+        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+            <div class="form-group">
+                <div class="col-md-12" id="alertNotif" style="display: none;"></div>
+            </div>
+        </div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12 col-sm-12 col-xs-12">
@@ -75,11 +80,11 @@
                 	<table class="table bordered-danger table-striped table-bordered table-hover responsive" id="tblJenis">
                 		<thead class="bordered-danger">
                 			<tr>
-	                			<th class="text-center col-md-1">#</th>
-	                			<th class="text-center col-md-2">Nama Jenis Surat</th>
+	                			<th class="text-center">#</th>
+	                			<th class="text-center">Nama Jenis Surat</th>
 	                			<th class="text-center">Deskripsi</th>
-	                			<th class="text-center col-md-1">Kode</th>
-	                			<th class="text-center col-md-1">Aksi</th>
+	                			<th class="text-center">Kode</th>
+	                			<th class="text-center">Aksi</th>
 	                		</tr>
                 		</thead>
                         <tbody></tbody>
@@ -141,6 +146,7 @@
                     $('[name="nama_jenis"]').val(data.nama_jenis);
                     $('[name="kode_jenis"]').val(data.kode_jenis);
                     $('[name="deskripsi"]').val(data.deskripsi);
+                    $('[name="status_jenis"]').val(data.status_jenis);
                     $('[name="id_jenis"]').val(data.id_jenis_surat);
                     $('#btnBatal').show();
                     $('[name="nama_jenis"]').focus();
@@ -153,52 +159,6 @@
                 }
             });
             return false;
-        }
-
-        // Function ketika tombol hapus
-        function deleteData(id){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            swal({
-                title: "Konfirmasi !",
-                text: "Anda yakin menghapus data jenis surat ini ?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes !'
-            }).then(function(){
-                $.ajax({
-                    url: "jenis_surat/"+id,
-                    type: "DELETE",
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#imgLoader').show();
-                    },
-                    success:function(response){
-                        if(response.status == 3){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil dihapus.'];
-                        }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal dihapus.'];
-                        }
-
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_jenis').focus();
-                        $('#btnBatal').hide();
-                        oTable.ajax.reload();
-                    },
-                    complete: function(){
-                        $('#imgLoader').hide();
-                    }
-                });
-            }).catch(swal.noop);
         }
 
         $(document).ready(function(){
@@ -228,6 +188,7 @@
                     "url": "{{ route('jenis_surat.data') }}",
                     "type": "GET"
                 },
+                "ordering": false,
                 "columnDefs": [
                     {
                         className: "text-center",
@@ -282,6 +243,10 @@
                         }
                     }
                 }
+            }).on('success.field.bv', function(e, data){
+                var $parent = data.element.parents('.form-group');
+                $parent.removeClass('has-success');
+                $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]').hide();
             }).on('success.form.bv', function(e){
                 e.preventDefault();
                 var id = $('#id_jenis').val();
@@ -314,6 +279,8 @@
                         $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
                             $('#alertNotif').slideUp(500);
                         });
+
+                        $('#frmJenissurat')[0].reset();
                         $('#nama_jenis').focus();
                         $('#btnBatal').hide();
                         oTable.ajax.reload();
@@ -322,7 +289,6 @@
                         $('#imgLoader').hide();
                     }
                 });
-                $('#id_jenis').val("");
                 $('#frmJenissurat').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
             });
         });

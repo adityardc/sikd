@@ -2,12 +2,6 @@
 
 @section('css')
     <link href="{{ asset('assets/js/datatables.bootstrap.min.css') }}" rel="stylesheet" />
-    <style type="text/css">
-        .modal-body-panjang {
-            height:500px;
-            overflow:auto;
-        }
-    </style>
 @endsection
 
 @section('breadcrumb')
@@ -15,29 +9,72 @@
         <i class="fa fa-hdd-o"></i>
         <a href="#">Agenda Direksi</a>
     </li>
-    <li class="active">Surat Masuk Direksi</li>
+    <li>
+        <a href="#">Surat Masuk Direksi</a>
+    </li>
+    <li class="active">Sentral</li>
 @endsection
 
 @section('title')
-    Halaman Surat Masuk Direksi
+    Halaman Surat Masuk Direksi Sentral
 @endsection
 
 @section('content')
     <div class="row">
-        <div class="col-lg-8 col-sm-8 col-xs-12">
+        <div class="col-lg-5 col-sm-5 col-xs-12">
             <div class="widget">
-                <div class="widget-header bordered-bottom bordered-azure">
-                    <span class="widget-caption">Tabel Surat Masuk Internal Direksi</span>
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <span class="widget-caption">Pencarian Surat Masuk Direksi Sentral</span>
+                </div>
+                <div class="widget-body">
+                    <form class="bv-form" role="form" id="frmCari" novalidate="novalidate">
+                        {{ csrf_field() }} {{ method_field('POST') }}
+                        <div class="row">
+                            <div class="col-lg-8 col-sm-8 col-xs-12">
+                                <div class="form-group">
+                                    <label for="status_hakakses">Direktur</label>
+                                    <select class="form-control" name="direktur" id="direktur">
+                                        @foreach($tujuan as $rowTujuan)
+                                            <option value="{{ $rowTujuan->id_bagian }}">{{ $rowTujuan->nama_bagian }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-xs-12">
+                                <div class="form-group">
+                                    <label for="status_hakakses">Tahun</label>
+                                    <select class="form-control" name="tahun" id="tahun">
+                                        @for ($i = date("Y"); $i >= 2017; $i--)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-yellow" id="btnTampil">Tampilkan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-yellow">
+                    <span class="widget-caption">Tabel Surat Masuk Direksi Sentral</span>
                 </div>
                 <div class="widget-body">
                     <p class="text-center"><img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader"></p>
-                    <table class="table bordered-azure table-striped table-bordered table-hover responsive" id="tblSuratdireksi">
-                        <thead class="bordered-azure">
+                    <table class="table bordered-yellow table-striped table-bordered table-hover responsive" id="tblSuratdireksi" width="100%">
+                        <thead class="bordered-yellow">
                             <tr>
                                 <th class="text-center">#</th>
-                                <th class="text-center">NO. SENTRAL</th>
+                                <th class="text-center">NO. STRL</th>
+                                <th class="text-center">TGL STRL</th>
                                 <th class="text-center">NO. SURAT</th>
-                                <th class="text-center">TANGGAL SURAT</th>
+                                <th class="text-center">PERIHAL</th>
                                 <th class="text-center">AKSI</th>
                             </tr>
                         </thead>
@@ -47,29 +84,8 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12 col-sm-12 col-xs-12">
-            <div class="widget">
-                <div class="widget-header bg-azure">
-                    <span class="widget-caption">Tabel Data Agenda Direksi</span>
-                </div>
-                <div class="widget-body">
-                    <table class="table bordered-azure table-striped table-bordered table-hover responsive" id="tblAgendadireksi">
-                        <thead class="bordered-azure">
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-center">NO. AGENDA</th>
-                                <th class="text-center">TANGGAL AGENDA</th>
-                                <th class="text-center">NO. SURAT</th>
-                                <th class="text-center">TUJUAN</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <!-- MODAL AGENDA DIREKSI -->
     <div class="modal fade bs-example-modal-sm" id="modalAgendadireksi" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-primary">
             <div class="modal-content">
@@ -80,34 +96,41 @@
                     </div>
                     <div class="modal-body modal-body-panjang">
                         <div class="row">
+                            <div class="col-lg-4 col-sm-4 col-xs-12">
+                                <div class="form-group">
+                                    <label for="id_tujuan">TUJUAN</label>
+                                    <select class="form-control" name="id_tujuan" id="id_tujuan">
+                                        @foreach($tujuan as $rowTujuan)
+                                            <option value="{{ $rowTujuan->id_bagian }}">{{ $rowTujuan->nama_bagian }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-xs-12">
+                                <div class="form-group">
+                                    <label for="id_jenis_surat">MASUK SEBAGAI</label>
+                                    <select class="form-control" name="id_jenis_surat" id="id_jenis_surat">
+                                        @foreach($jenis as $rowSifat)
+                                            <option value="{{ $rowSifat->id_jenis_surat }}">{{ $rowSifat->nama_jenis }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-xs-12">
+                                <div class="form-group">
+                                    <label for="tanggal_agenda">TANGGAL AGENDA</label>
+                                    <input type="text" class="form-control tgl" id="tanggal_agenda" name="tanggal_agenda" data-bv-field="tanggal_agenda">
+                                    <i class="form-control-feedback" data-bv-field="tanggal_agenda" style="display: none;"></i>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12 col-sm-12 col-xs-12">
-                                <div class="col-lg-4 col-sm-4 col-xs-12">
-                                    <div class="form-group">
-                                        <label for="id_tujuan">TUJUAN</label>
-                                        <select class="form-control" name="id_tujuan" id="id_tujuan">
-                                            @foreach($tujuan as $rowTujuan)
-                                                <option value="{{ $rowTujuan->id_bagian }}">{{ $rowTujuan->nama_bagian }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4 col-xs-12">
-                                    <div class="form-group">
-                                        <label for="id_jenis_surat">MASUK SEBAGAI</label>
-                                        <select class="form-control" name="id_jenis_surat" id="id_jenis_surat">
-                                            @foreach($jenis as $rowSifat)
-                                                <option value="{{ $rowSifat->id_jenis_surat }}">{{ $rowSifat->nama_jenis }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-4 col-xs-12">
-                                    <div class="form-group">
-                                        <label for="tanggal_agenda">TANGGAL AGENDA</label>
-                                        <input type="text" class="form-control tgl" id="tanggal_agenda" name="tanggal_agenda" data-bv-field="tanggal_agenda">
-                                        <i class="form-control-feedback" data-bv-field="tanggal_agenda" style="display: none;"></i>
-                                    </div> 
-                                </div>
+                                <div class="form-group">
+                                    <label for="tanggal_agenda">KETERANGAN</label>
+                                    <textarea class="form-control" rows="1" name="keterangan" id="keterangan"></textarea>
+                                    <i class="form-control-feedback" data-bv-field="keterangan" style="display: none;"></i>
+                                </div> 
                             </div>
                         </div>
                         <div class="row">
@@ -135,7 +158,7 @@
     <script src="{{ asset('assets/js/validation/bootstrapValidator.js') }}"></script>
     <script src="{{ asset('assets/js/datetime/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript">
-        // Function agenda surat masuk internal
+        // FUNCTION SURAT MASUK DIREKSI / AGENDA DIREKSI
         function agenda_direksi(id){
             $.ajaxSetup({
                 headers: {
@@ -166,6 +189,7 @@
         $(document).ready(function(){
             $('body').tooltip({selector: '[data-toggle="tooltip"]'});
             $('#imgLoader').hide();
+            $('#imgLoaderEksternal').hide();
 
             var tgl_agenda = $('#tanggal_agenda').datepicker({
                 autoclose: true,
@@ -176,7 +200,11 @@
                 $('#frmAgendadireksi').bootstrapValidator('revalidateField', 'tanggal_agenda');
             }).data('datepicker');
 
-            // TABLE SURAT MASUK INTERNAL DIREKSI
+            $('#btnTampil').click(function(){
+                oTableSuratdireksi.fnDraw();
+            });
+
+            // TABLE SURAT MASUK EKSTERNAL DIREKSI
             var oTableSuratdireksi = $('#tblSuratdireksi').dataTable({
                 initComplete: function(){
                     var api = this.api();
@@ -189,66 +217,31 @@
                 "processing": true,
                 "serverSide": true,
                 "ordering": false,
-                "pageLength": 5,
+                "pageLength": 20,
                 "lengthMenu": [5, 10, 15, 20],
                 "ajax": {
                     "url": "{{ route('agenda_direksi.data') }}",
-                    "type": "GET"
+                    // "type": "GET",
+                    "data": function(d){
+                        d.id_direktur = $('#direktur').val();
+                        d.tahun = $('#tahun').val();
+                    }
                 },
                 "aoColumnDefs": [{
-                    "aTargets": [0],
+                    "aTargets": [0,5],
                     "sWidth": "2%",
                     "sClass": "text-center"
                 },{
                     "aTargets": [1],
-                    "sWidth": "20%",
+                    "sWidth": "8%",
                     "sClass": "text-right"
                 },{
                     "aTargets": [2],
-                    "sClass": "text-right"
-                },{
-                   "aTargets": [3],
-                    "sWidth": "20%",
+                    "sWidth": "13%",
                     "sClass": "text-center"
                 },{
-                   "aTargets": [4],
-                    "sWidth": "10%",
-                    "sClass": "text-center" 
-                }]
-            });
-
-            // TABLE AGENDA DIREKSI
-            var oTableAgendadireksi = $('#tblAgendadireksi').dataTable({
-                initComplete: function(){
-                    var api = this.api();
-                    $('#tblAgendadireksi_filter input').off('.DT').on('keyup.DT', function(e){
-                        if(e.keyCode == 13){
-                            api.search(this.value).draw();
-                        }
-                    });
-                },
-                "processing": true,
-                "serverSide": true,
-                "ordering": false,
-                "ajax": {
-                    "url": "{{ route('agenda_direksi.agenda') }}",
-                    "type": "GET"
-                },
-                "aoColumnDefs": [{
-                    "aTargets": [0],
-                    "sWidth": "2%",
-                    "sClass": "text-center"
-                },{
-                    "aTargets": [1],
-                    "sWidth": "15%",
-                    "sClass": "text-right"
-                },{
-                    "aTargets": [2],
-                    "sWidth": "17%",
-                    "sClass": "text-center"
-                },{
-                    "aTargets": [4],
-                    "sWidth": "23%" 
+                    "aTargets": [3],
+                    "sWidth": "20%"
                 }]
             });
 
@@ -272,6 +265,10 @@
                         }
                     }
                 }
+            }).on('success.field.bv', function(e, data){
+                var $parent = data.element.parents('.form-group');
+                $parent.removeClass('has-success');
+                $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]').hide();
             }).on('success.form.bv', function(e){
                 $.ajax({
                     url: "{{ route('agenda_direksi.simpan') }}",
@@ -286,12 +283,14 @@
                             swal({
                                 title: "Nomor Agenda Direksi : "+data.nomor,
                                 text: "Surat masuk berhasil diagenda direksi.",
-                                type: "success",
-                                width: "50%"
+                                type: "success"
                             });
-
-                            oTableSuratdireksi.fnDraw();
-                            oTableAgendadireksi.fnDraw();
+                        }else if(data.status == 2){
+                            swal({
+                                title: data.nomor,
+                                text: "Surat sudah diagenda.",
+                                type: "error"
+                            });
                         }else{
                             swal('Gagal !', 'Data surat gagal diagenda.', 'error');
                         }

@@ -24,7 +24,7 @@
                     <span class="widget-caption">Form Karyawan</span>
                 </div>
                 <div class="widget-body">
-                    <form class="bv-form" role="form" id="frmKaryawan" novalidate="novalidate">
+                    <form class="bv-form" role="form" id="frmKaryawan" novalidate="novalidate" enctype="multipart/form-data" >
                         {{ csrf_field() }} {{ method_field('POST') }}
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-xs-12">
@@ -35,7 +35,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="nama_karyawan">Nama Karyawan</label>
-                                            <input type="text" class="form-control" id="nama_karyawan" name="nama_karyawan" data-bv-field="nama_karyawan" enctype="multipart/form-data" onkeyup="upNama()" autofocus>
+                                            <input type="text" class="form-control" id="nama_karyawan" name="nama_karyawan" data-bv-field="nama_karyawan" maxlength="150" onkeyup="upNama()" autofocus>
                                             <i class="form-control-feedback" data-bv-field="nama_karyawan" style="display: none;"></i>
                                         </div>
                                         <div class="row">
@@ -58,7 +58,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="email">Alamat Email</label>
-                                                    <input type="email" class="form-control" id="email" name="email" data-bv-field="email">
+                                                    <input type="email" class="form-control" id="email" name="email" data-bv-field="email" maxlength="150">
                                                     <i class="form-control-feedback" data-bv-field="email" style="display: none;"></i>
                                                 </div>  
                                             </div>
@@ -177,11 +177,11 @@
                 	<table class="table bordered-sky table-striped table-bordered table-hover responsive" id="tblKaryawan">
                 		<thead class="bordered-sky">
                 			<tr>
-	                			<th class="text-center col-md-1">#</th>
+	                			<th class="text-center">#</th>
 	                			<th class="text-center">Nama Karyawan</th>
-                                <th class="text-center col-md-3">Bagian</th>
-                                <th class="text-center col-md-3">Jabatan</th>
-	                			<th class="text-center col-md-1">Aksi</th>
+                                <th class="text-center">Bagian</th>
+                                <th class="text-center">Jabatan</th>
+	                			<th class="text-center">Aksi</th>
 	                		</tr>
                 		</thead>
                         <tbody></tbody>
@@ -294,52 +294,6 @@
             return false;
         }
 
-        // Function ketika tombol hapus
-        function deleteData(id){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            swal({
-                title: "Konfirmasi !",
-                text: "Anda yakin menghapus data karyawan ini ?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes !'
-            }).then(function(){
-                $.ajax({
-                    url: "karyawan/"+id,
-                    type: "DELETE",
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#imgLoader').show();
-                    },
-                    success:function(response){
-                        if(response.status == 3){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil dihapus.'];
-                        }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal dihapus.'];
-                        }
-
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_karyawan').focus();
-                        $('#btnBatal').hide();
-                        oTable.ajax.reload();
-                    },
-                    complete: function(){
-                        $('#imgLoader').hide();
-                    }
-                });
-            }).catch(swal.noop);
-        }
-
         // Function ketika tombol ubah foto
         function editFoto(id){
             $.ajaxSetup({
@@ -413,6 +367,7 @@
                     "url": "{{ route('karyawan.data') }}",
                     "type": "GET"
                 },
+                "ordering": false,
                 "columnDefs": [
                     {
                         className: "text-center",
@@ -437,6 +392,10 @@
                         validators: {
                             notEmpty: {
                                 message: 'Kolom harus diisi !'
+                            },
+                            stringLength: {
+                                max: 150,
+                                message: 'Maksimal 150 karakter yang diperbolehkan'
                             }
                         }
                     },
@@ -466,6 +425,10 @@
                         validators: {
                             notEmpty: {
                                 message: 'Kolom harus diisi !'
+                            },
+                            stringLength: {
+                                max: 150,
+                                message: 'Maksimal 150 karakter yang diperbolehkan'
                             }
                         }
                     },
@@ -483,6 +446,10 @@
                         }
                     }
                 }
+            }).on('success.field.bv', function(e, data){
+                var $parent = data.element.parents('.form-group');
+                $parent.removeClass('has-success');
+                $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]').hide();
             }).on('success.form.bv', function(e){
                 e.preventDefault();
                 var formdata = new FormData($("#frmKaryawan")[0]);
@@ -517,6 +484,8 @@
                         $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
                             $('#alertNotif').slideUp(500);
                         });
+
+                        $('#frmKaryawan')[0].reset();
                         $('#nama_karyawan').focus();
                         $('.divFoto').show();
                         $('#btnBatal').hide();
@@ -526,7 +495,6 @@
                         $('#imgLoader').hide();
                     }
                 });
-                $('#id_karyawan').val("");
                 $('#frmKaryawan').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
             });
 
@@ -578,6 +546,8 @@
                         $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
                             $('#alertNotif').slideUp(500);
                         });
+
+                        $('#frmFoto')[0].reset();
                         $('#nama_karyawan').focus();
                         $('.divFoto').show();
                         $('#btnBatal').hide();
@@ -588,7 +558,6 @@
                         $('#imgLoader').hide();
                     }
                 });
-                $('#id_karyawan').val("");
                 $('#frmFoto').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
             });
         });

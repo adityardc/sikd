@@ -18,7 +18,7 @@ class cek_role
     {
         $level = Auth::user()->id_role;
         if ($level != '1') {
-            return redirect('/home');
+            return redirect('/forbidden');
         }
         
         return $next($request);

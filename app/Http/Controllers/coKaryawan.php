@@ -1,5 +1,12 @@
 <?php
 
+// ==================================================================================
+// *   Web Analyst + Design + Develop by Aditya Rizky Dinna Cahya - Staf TI PT Perkebunan Nusantara IX
+// *   Project : Sistem Informasi Kesekretariatan - Surakarta, 01 April 2018
+// *   
+// *   :: plz..don't remove this text if u are "the real open-sourcer" ::
+// ====================================================================================
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -24,6 +31,7 @@ class coKaryawan extends Controller
         $karyawan = DB::table('tbl_karyawan')
                     ->join('tbl_bagian', 'tbl_karyawan.id_bagian', '=', 'tbl_bagian.id_bagian')
                     ->join('tbl_jabatan', 'tbl_karyawan.id_jabatan', '=', 'tbl_jabatan.id_jabatan')
+                    ->orderBy('id_karyawan')
                     ->get();
         $no = 0;
         $data = array();
@@ -31,11 +39,10 @@ class coKaryawan extends Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $list->nama_karyawan;
+            $row[] = (($list->status_karyawan == 1) ? "<span class='badge badge-success tooltip-success' data-toggle='tooltip' data-placement='top' title='Status Aktif'><i class='menu-icon fa fa-check'></i></span> " : "<span class='badge badge-danger tooltip-danger' data-toggle='tooltip' data-placement='top' title='Status Non Aktif'><i class='menu-icon fa fa-close'></i></span> ").$list->nama_karyawan;
             $row[] = $list->nama_bagian;
             $row[] = $list->nama_jabatan;
             $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_karyawan.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>
-            		  <button type='button' class='btn btn-default btn-xs shiny icon-only danger tooltip-danger' onclick='deleteData(".$list->id_karyawan.")' data-toggle='tooltip' data-placement='top' data-original-title='Hapus Data' href='javascript:void(0);'><i class='fa fa-times'></i></button>
                       <button type='button' class='btn btn-default btn-xs shiny icon-only purple tooltip-purple' onclick='editFoto(".$list->id_karyawan.")' data-toggle='tooltip' data-placement='top' data-original-title='Ubah Foto' href='javascript:void(0);'><i class='fa fa-file-photo-o'></i></button>";
             $data[] = $row;
         }
@@ -118,13 +125,5 @@ class coKaryawan extends Controller
             'foto' => $fullEmail,
         ]);
         return response()->json(['status'=>'4','tes'=>$fullEmail]);
-    }
-
-    public function destroy($id)
-    {
-        $ambilFoto = DB::table('tbl_karyawan')->select('foto')->where('id_karyawan', $id)->first();
-        Storage::disk('public')->delete($ambilFoto->foto);
-        DB::table('tbl_karyawan')->where('id_karyawan', $id)->delete();
-        return response()->json(['status'=>'3']);
     }
 }

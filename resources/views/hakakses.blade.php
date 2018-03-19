@@ -18,38 +18,47 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-lg-4 col-sm-4 col-xs-12">
+		<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
 			<div class="widget">
 				<div class="widget-header bordered-bottom bordered-maroon">
                     <span class="widget-caption">Form Hak Akses</span>
                 </div>
                 <div class="widget-body">
-                	<div id="horizontal-form">
-                		<form class="form-horizontal bv-form" role="form" id="frmHakakses" novalidate="novalidate">
-                            {{ csrf_field() }} {{ method_field('POST') }}
-                			<div class="form-group">
-                                <label for="nama_hakakses" class="col-sm-4 control-label no-padding-right">Hak Akses</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" name="nama_hakakses" id="nama_hakakses" data-bv-field="nama_hakakses" onkeyup="upNama()" autofocus>
+                	<form class="bv-form" role="form" id="frmHakakses" novalidate="novalidate">
+                        {{ csrf_field() }} {{ method_field('POST') }}
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="nama_hakakses">Hak Akses</label>
+                                    <input type="text" class="form-control" name="nama_hakakses" id="nama_hakakses" data-bv-field="nama_hakakses" maxlength="50" onkeyup="upNama()" autofocus>
                                     <i class="form-control-feedback" data-bv-field="nama_hakakses" style="display: none;"></i>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-4 col-sm-8">
-                                    <button type="submit" class="btn btn-maroon" id="btnSimpan">Simpan</button>
-                                    <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
-                                    <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
-                                    <input type="text" name="id_hakakses" id="id_hakakses" class="form-control" style="display: none;">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="status_hakakses">Status Hak Akses</label>
+                                    <select class="form-control" name="status_hakakses" id="status_hakakses">
+                                        <option value="Y">AKTIF</option>
+                                        <option value="N">TIDAK AKTIF</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-md-12" id="alertNotif" style="display: none;"></div>
-                            </div>
-                		</form>
-                	</div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-maroon" id="btnSimpan">Simpan</button>
+                            <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
+                            <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
+                            <input type="text" name="id_hakakses" id="id_hakakses" class="form-control" style="display: none;">
+                        </div>
+                    </form>
                 </div>
 			</div>
 		</div>
+        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+            <div class="form-group">
+                <div class="col-md-12" id="alertNotif" style="display: none;"></div>
+            </div>
+        </div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12 col-sm-12 col-xs-12">
@@ -61,9 +70,9 @@
                 	<table class="table bordered-maroon table-striped table-bordered table-hover responsive" id="tblHakAkses">
                 		<thead class="bordered-maroon">
                 			<tr>
-	                			<th class="text-center col-md-1">#</th>
+	                			<th class="text-center">#</th>
 	                			<th class="text-center">Hak Akses</th>
-	                			<th class="text-center col-md-1">Aksi</th>
+	                			<th class="text-center">Aksi</th>
 	                		</tr>
                 		</thead>
                         <tbody></tbody>
@@ -112,6 +121,7 @@
                     $('#frmHakakses').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
                     $('#nama_hakakses').val(data.nama_hakakses);
                     $('#id_hakakses').val(data.id_hakakses);
+                    $('#status_hakakses').val(data.status_hakakses);
                     $('#btnBatal').show();
                     $('#nama_hakakses').focus();
                 },
@@ -123,52 +133,6 @@
                 }
             });
             return false;
-        }
-
-        // Function ketika tombol hapus
-        function deleteData(id){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            swal({
-                title: "Konfirmasi !",
-                text: "Anda yakin menghapus data hak akses ini ?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes !'
-            }).then(function(){
-                $.ajax({
-                    url: "hakakses/"+id,
-                    type: "DELETE",
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#imgLoader').show();
-                    },
-                    success:function(response){
-                        if(response.status == 3){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil dihapus.'];
-                        }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal dihapus.'];
-                        }
-
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_hakakses').focus();
-                        $('#btnBatal').hide();
-                        oTable.ajax.reload();
-                    },
-                    complete: function(){
-                        $('#imgLoader').hide();
-                    }
-                });
-            }).catch(swal.noop);
         }
 
         $(document).ready(function(){
@@ -197,10 +161,12 @@
                     "url": "{{ route('hakakses.data') }}",
                     "type": "GET"
                 },
+                "ordering": false,
                 "columnDefs": [
                     {
                         className: "text-center",
-                        targets: [0,2]
+                        targets: [0,2],
+                        width: "3%"
                     },
                     {
                         orderable: false,
@@ -221,10 +187,18 @@
                         validators: {
                             notEmpty: {
                                 message: 'Kolom harus diisi !'
+                            },
+                            stringLength: {
+                                max: 50,
+                                message: 'Maksimal 50 karakter yang diperbolehkan'
                             }
                         }
                     }
                 }
+            }).on('success.field.bv', function(e, data){
+                var $parent = data.element.parents('.form-group');
+                $parent.removeClass('has-success');
+                $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]').hide();
             }).on('success.form.bv', function(e){
                 e.preventDefault();
                 var id = $('#id_hakakses').val();
@@ -257,6 +231,8 @@
                         $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
                             $('#alertNotif').slideUp(500);
                         });
+
+                        $('#frmHakakses')[0].reset();
                         $('#nama_hakakses').focus();
                         $('#btnBatal').hide();
                         oTable.ajax.reload();
@@ -265,7 +241,6 @@
                         $('#imgLoader').hide();
                     }
                 });
-                $('#id_hakakses').val("");
                 $('#frmHakakses').bootstrapValidator('disableSubmitButtons', false).bootstrapValidator('resetForm', true);
             });
         });

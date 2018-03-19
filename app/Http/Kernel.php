@@ -58,6 +58,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'cek_role' => \App\Http\Middleware\cek_role::class,
-        'buat_tabel' => \App\Http\Middleware\mwBuat_tabel::class,
+        'cek_password' => \App\Http\Middleware\cek_password::class,
+        'role_sekdir' => \App\Http\Middleware\role_sekdir::class,
+        'role_sekretariat' => \App\Http\Middleware\role_sekretariat::class
     ];
 }

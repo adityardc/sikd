@@ -1,3 +1,9 @@
+<!-- ==================================================================================
+*   Web Analyst + Design + Develop by Aditya Rizky Dinna Cahya - Staf TI PT Perkebunan Nusantara IX
+*   Project : Sistem Informasi Kesekretariatan - Surakarta, 01 April 2018
+*   
+*   :: plz..don't remove this text if u are "the real open-sourcer" ::
+==================================================================================== -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -97,13 +103,13 @@
         <div class="page-container">
             <div class="page-sidebar sidebar-fixed" id="sidebar">
                 <ul class="nav sidebar-menu">
-                    <li class="{{ set_active('home') }}">
+                    <li class="{{ set_active(['home','lap_sm_eks','lap_sm_int','lap_sk_dir_int']) }}">
                         <a href="{{ route('home') }}">
                             <i class="menu-icon fa fa-university"></i>
                             <span class="menu-text">Beranda</span>
                         </a>
                     </li>
-                    <li class="{{ set_active_open(['bagian','jabatan','golongan','masakerja','pendidikan','hakakses','karyawan','pengguna','parentKlasifikasi','childKlasifikasi','jenis_surat','sifat_surat','disposisi']) }}">
+                    <li class="{{ set_active_open(['bagian','jabatan','golongan','masakerja','pendidikan','hakakses','karyawan','pengguna','klasifikasi','jenis_surat','sifat_surat','jenis_disposisi','retensi_aktif','retensi_inaktif','retensi_deskripsi']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-database"></i>
 
@@ -136,8 +142,8 @@
                             <li class="{{ set_active('jenis_surat') }}">
                                 <a href="{{ route('jenis_surat') }}"><span class="menu-text">Data Jenis Surat</span></a>
                             </li>
-                            <li class="{{ set_active('disposisi') }}">
-                                <a href="{{ route('disposisi') }}"><span class="menu-text">Data Jenis Disposisi Direksi</span></a>
+                            <li class="{{ set_active('jenis_disposisi') }}">
+                                <a href="{{ route('jenis_disposisi') }}"><span class="menu-text">Data Jenis Disposisi Direksi</span></a>
                             </li>
                             <li class="{{ set_active('sifat_surat') }}">
                                 <a href="{{ route('sifat_surat') }}"><span class="menu-text">Data Sifat Surat</span></a>
@@ -148,32 +154,21 @@
                             <li class="{{ set_active('pengguna') }}">
                                 <a href="{{ route('pengguna') }}"><span class="menu-text">Data Pengguna</span></a>
                             </li>
-                            <li class="{{ set_active_open(['parentKlasifikasi','childKlasifikasi']) }}">
-                                <a href="#" class="menu-dropdown">
-                                    <span class="menu-text">
-                                        Data Klasifikasi
-                                    </span>
-
-                                    <i class="menu-expand"></i>
-                                </a>
-                                <ul class="submenu">
-                                    <li class="{{ set_active('parentKlasifikasi') }}">
-                                        <a href="{{ route('parentKlasifikasi') }}">
-                                            <i class="menu-icon fa fa-hand-o-right"></i>
-                                            <span class="menu-text">Parent Klasifikasi</span>
-                                        </a>
-                                    </li>
-                                    <li class="{{ set_active('childKlasifikasi') }}">
-                                        <a href="{{ route('childKlasifikasi') }}">
-                                            <i class="menu-icon fa fa-hand-o-right"></i>
-                                            <span class="menu-text">Child Klasifikasi</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                            <li class="{{ set_active('klasifikasi') }}">
+                                <a href="{{ route('klasifikasi') }}"><span class="menu-text">Data Klasifikasi</span></a>
+                            </li>
+                            <li class="{{ set_active('retensi_aktif') }}">
+                                <a href="{{ route('retensi_aktif') }}"><span class="menu-text">Data Retensi Aktif</span></a>
+                            </li>
+                            <li class="{{ set_active('retensi_inaktif') }}">
+                                <a href="{{ route('retensi_inaktif') }}"><span class="menu-text">Data Retensi Inaktif</span></a>
+                            </li>
+                            <li class="{{ set_active('retensi_deskripsi') }}">
+                                <a href="{{ route('retensi_deskripsi') }}"><span class="menu-text">Data Retensi Deskripsi</span></a>
                             </li>
                         </ul>
                     </li>
-                    <li class="{{ set_active_open(['surat_keluar','sm_eksternal','sm_internal']) }}">
+                    <li class="{{ set_active_open(['surat_keluar_int','surat_keluar_int.tambah','surat_keluar_eks','surat_keluar_eks.tambah','surat_keluar_karyawan','surat_keluar_karyawan.tambah','surat_keluar_direktur_internal','surat_keluar_direktur_internal.tambah','surat_keluar_direktur_eksternal','surat_keluar_direktur_eksternal.tambah','surat_masuk_eksternal','surat_masuk_eksternal.tambah','surat_masuk_internal']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-book"></i>
 
@@ -185,18 +180,45 @@
                         </a>
 
                         <ul class="submenu">
-                            <li class="{{ set_active('sm_eksternal') }}">
-                                <a href="{{ route('sm_eksternal') }}"><span class="menu-text">Surat Masuk Eksternal</span></a>
+                            <li class="{{ set_active(['surat_masuk_eksternal','surat_masuk_eksternal.tambah']) }}">
+                                <a href="{{ route('surat_masuk_eksternal') }}"><span class="menu-text">Surat Masuk Eksternal</span></a>
                             </li>
-                            <li class="{{ set_active('sm_internal') }}">
-                                <a href="{{ route('sm_internal') }}"><span class="menu-text">Surat Masuk Internal</span></a>
+                            <li class="{{ set_active('surat_masuk_internal') }}">
+                                <a href="{{ route('surat_masuk_internal') }}"><span class="menu-text">Surat Masuk Internal</span></a>
                             </li>
-                            <li class="{{ set_active('surat_keluar') }}">
-                                <a href="{{ route('surat_keluar') }}"><span class="menu-text">Surat Keluar</span></a>
+                            <li class="{{ set_active_open(['surat_keluar_direktur_internal','surat_keluar_direktur_internal.tambah','surat_keluar_direktur_eksternal','surat_keluar_direktur_eksternal.tambah']) }}">
+                                <a href="#" class="menu-dropdown">
+                                    <span class="menu-text">
+                                        Surat Keluar Direksi
+                                    </span>
+                                    <i class="menu-expand"></i>
+                                </a>
+
+                                <ul class="submenu">
+                                    <li class="{{ set_active(['surat_keluar_direktur_internal','surat_keluar_direktur_internal.tambah']) }}">
+                                        <a href="{{ route('surat_keluar_direktur_internal') }}">
+                                            <span class="menu-text">Internal</span>
+                                        </a>
+                                    </li>
+                                    <li class="{{ set_active(['surat_keluar_direktur_eksternal','surat_keluar_direktur_eksternal.tambah']) }}">
+                                        <a href="{{ route('surat_keluar_direktur_eksternal') }}">
+                                            <span class="menu-text">Eksternal</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="{{ set_active(['surat_keluar_int','surat_keluar_int.tambah']) }}">
+                                <a href="{{ route('surat_keluar_int') }}"><span class="menu-text">Surat Keluar Internal</span></a>
+                            </li>
+                            <li class="{{ set_active(['surat_keluar_eks','surat_keluar_eks.tambah']) }}">
+                                <a href="{{ route('surat_keluar_eks') }}"><span class="menu-text">Surat Keluar Eksternal</span></a>
+                            </li>
+                            <li class="{{ set_active(['surat_keluar_karyawan','surat_keluar_karyawan.tambah']) }}">
+                                <a href="{{ route('surat_keluar_karyawan') }}"><span class="menu-text">Surat Keluar Karyawan</span></a>
                             </li>
                         </ul>
                     </li>
-                    <li class="{{ set_active_open(['agenda_direksi']) }}">
+                    <li class="{{ set_active_open(['agenda_direksi','agenda_direksi_langsung','disposisi_direksi_sm','disposisi_direksi_sk','agenda_sk_direksi']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-user-secret"></i>
 
@@ -208,34 +230,50 @@
                         </a>
 
                         <ul class="submenu">
-                            <li class="{{ set_active('agenda_direksi') }}">
-                                <a href="{{ route('agenda_direksi') }}"><span class="menu-text">Surat Masuk Direksi</span></a>
-                            </li>
-                            <li class="{{ set_active('jabatan') }}">
-                                <a href="#"><span class="menu-text">Disposisi Direksi</span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#" class="menu-dropdown">
-                            <i class="menu-icon fa fa-area-chart"></i>
+                            <li class="{{ set_active_open(['disposisi_direksi_sm','disposisi_direksi_sk']) }}">
+                                <a href="" class="menu-dropdown">
+                                    <span class="menu-text">
+                                        Disposisi Direksi
+                                    </span>
+                                    <i class="menu-expand"></i>
+                                </a>
 
-                            <span class="menu-text">
-                                Laporan
-                            </span>
-
-                            <i class="menu-expand"></i>
-                        </a>
-
-                        <ul class="submenu">
-                            <li class="{{ set_active('bagian') }}">
-                                <a href="#"><span class="menu-text">Surat Masuk Sentral</span></a>
+                                <ul class="submenu">
+                                    <li class="{{ set_active_open(['disposisi_direksi_sm']) }}">
+                                        <a href="{{ route('disposisi_direksi_sm') }}">
+                                            <span class="menu-text">Surat Masuk</span>
+                                        </a>
+                                    </li>
+                                    <li class="{{ set_active_open(['disposisi_direksi_sk']) }}">
+                                        <a href="{{ route('disposisi_direksi_sk') }}">
+                                            <span class="menu-text">Surat Keluar</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li class="{{ set_active('bagian') }}">
-                                <a href="#"><span class="menu-text">Surat Keluar</span></a>
+                            <li class="{{ set_active_open(['agenda_direksi','agenda_direksi_langsung']) }}">
+                                <a href="" class="menu-dropdown">
+                                    <span class="menu-text">
+                                        Surat Masuk Direksi
+                                    </span>
+                                    <i class="menu-expand"></i>
+                                </a>
+
+                                <ul class="submenu">
+                                    <li class="{{ set_active_open(['agenda_direksi']) }}">
+                                        <a href="{{ route('agenda_direksi') }}">
+                                            <span class="menu-text">Sentral</span>
+                                        </a>
+                                    </li>
+                                    <li class="{{ set_active_open(['agenda_direksi_langsung']) }}">
+                                        <a href="{{ route('agenda_direksi_langsung') }}">
+                                            <span class="menu-text">Langsung</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li class="{{ set_active('jabatan') }}">
-                                <a href="#"><span class="menu-text">Surat Masuk Direksi</span></a>
+                            <li class="{{ set_active('agenda_sk_direksi') }}">
+                                <a href="{{ route('agenda_sk_direksi') }}"><span class="menu-text">Surat Keluar Direksi</span></a>
                             </li>
                         </ul>
                     </li>

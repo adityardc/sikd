@@ -18,41 +18,30 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-lg-8 col-sm-8 col-xs-12">
+		<div class="col-lg-6 col-sm-6 col-xs-12 col-md-6">
 			<div class="widget">
 				<div class="widget-header bordered-bottom bordered-palegreen">
                     <span class="widget-caption">Form Bagian</span>
                 </div>
                 <div class="widget-body">
-                	<div id="horizontal-form">
-                		<form class="form-horizontal bv-form" role="form" id="frmBagian" novalidate="novalidate">
-                            {{ csrf_field() }} {{ method_field('POST') }}
-                			<div class="form-group">
-                                <label for="nama_bagian" class="col-sm-3 control-label no-padding-right">Nama Bagian</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="nama_bagian" id="nama_bagian" data-bv-field="nama_bagian" onkeyup="upNama()" autofocus>
-                                    <i class="form-control-feedback" data-bv-field="nama_bagian" style="display: none;"></i>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="kode_bagian" class="col-sm-3 control-label no-padding-right">Kode Bagian</label>
-                                <div class="col-sm-3">
+            		<form class="bv-form" role="form" id="frmBagian" novalidate="novalidate">
+                        {{ csrf_field() }} {{ method_field('POST') }}
+            			<div class="form-group">
+                            <label for="nama_bagian">Nama Bagian</label>
+                            <input type="text" class="form-control" name="nama_bagian" id="nama_bagian" data-bv-field="nama_bagian" maxlength="150" onkeyup="upNama()" autofocus>
+                            <i class="form-control-feedback" data-bv-field="nama_bagian" style="display: none;"></i>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="kode_bagian"">Kode Bagian</label>
                                     <input type="text" class="form-control" name="kode_bagian" id="kode_bagian" data-bv-field="kode_bagian" maxlength="10" onkeyup="upKode()">
                                     <i class="form-control-feedback" data-bv-field="kode_bagian" style="display: none;"></i>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="kode_bagian" class="col-sm-3 control-label no-padding-right">Status Tindasan Surat</label>
-                                <div class="col-sm-3">
-                                    <select class="form-control" name="tindasan" id="tindasan">
-                                        <option value="1">AKTIF</option>
-                                        <option value="0">TIDAK AKTIF</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="grup_bagian" class="col-sm-3 control-label no-padding-right">Grup Bagian</label>
-                                <div class="col-sm-3">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="grup_bagian">Grup Bagian</label>
                                     <select class="form-control" name="grup_bagian" id="grup_bagian">
                                         <option value="0">DIREKSI</option>
                                         <option value="1">BAGIAN KANTOR DIREKSI</option>
@@ -62,22 +51,42 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-3 col-sm-9">
-                                    <button type="submit" class="btn btn-palegreen" id="btnSimpan">Simpan</button>
-                                    <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
-                                    <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
-                                    <input type="text" name="id_bagian" id="id_bagian" class="form-control" style="display: none;">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="kode_bagian">Status Tindasan Surat</label>
+                                    <select class="form-control" name="tindasan" id="tindasan">
+                                        <option value="1">AKTIF</option>
+                                        <option value="0">TIDAK AKTIF</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-md-12" id="alertNotif" style="display: none;"></div>
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="status_bagian">Status Bagian</label>
+                                    <select class="form-control" name="status_bagian" id="status_bagian">
+                                        <option value="Y">AKTIF</option>
+                                        <option value="N">TIDAK AKTIF</option>
+                                    </select>
+                                </div>
                             </div>
-                		</form>
-                	</div>
+                        </div>                                
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-palegreen" id="btnSimpan">Simpan</button>
+                            <button type="button" class="btn btn-yellow" id="btnBatal">Batal</button>
+                            <img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader">
+                            <input type="text" name="id_bagian" id="id_bagian" class="form-control" style="display: none;">
+                        </div>
+            		</form>
                 </div>
 			</div>
 		</div>
+        <div class="col-lg-6 col-sm-6 col-xs-12 col-md-6">
+            <div class="form-group">
+                <div id="alertNotif" style="display: none;"></div>
+            </div>
+        </div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12 col-sm-12 col-xs-12">
@@ -86,15 +95,15 @@
                     <span class="widget-caption">Tabel Data Bagian</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-palegreen table-striped table-bordered table-hover responsive" id="tblBagian">
+                	<table class="table bordered-palegreen table-striped table-bordered table-hover responsive" id="tblBagian" width="100%">
                 		<thead class="bordered-palegreen">
                 			<tr>
-	                			<th class="text-center col-md-1">#</th>
+	                			<th class="text-center">#</th>
 	                			<th class="text-center">Nama Bagian</th>
 	                			<th class="text-center">Kode Bagian</th>
                                 <th class="text-center">Grup</th>
                                 <th class="text-center">Status Tindasan</th>
-	                			<th class="text-center col-md-1">Aksi</th>
+	                			<th class="text-center">Aksi</th>
 	                		</tr>
                 		</thead>
                         <tbody></tbody>
@@ -152,6 +161,7 @@
                     $('#id_bagian').val(data.id_bagian);
                     $('#tindasan').val(data.tindasan);
                     $('#grup_bagian').val(data.grup_bagian);
+                    $('#status_bagian').val(data.status_bagian);
                     $('#btnBatal').show();
                     $('#nama_bagian').focus();
                 },
@@ -163,52 +173,6 @@
                 }
             });
             return false;
-        }
-
-        // Function ketika tombol hapus
-        function deleteData(id){
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            swal({
-                title: "Konfirmasi !",
-                text: "Anda yakin menghapus data bagian ini ?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes !'
-            }).then(function(){
-                $.ajax({
-                    url: "bagian/"+id,
-                    type: "DELETE",
-                    dataType: 'json',
-                    beforeSend: function(){
-                        $('#imgLoader').show();
-                    },
-                    success:function(response){
-                        if(response.status == 3){
-                            var alertStatus = ['alert-success', 'Sukses!', 'Data berhasil dihapus.'];
-                        }else{
-                            var alertStatus = ['alert-danger', 'Gagal!', 'Data gagal dihapus.'];
-                        }
-
-                        $('#alertNotif').html("<div class='alert "+alertStatus[0]+" alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>"+alertStatus[1]+"</strong> "+alertStatus[2]+"</div>");
-                        $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
-                            $('#alertNotif').slideUp(500);
-                        });
-                        $('#nama_bagian').focus();
-                        $('#btnBatal').hide();
-                        oTable.ajax.reload();
-                    },
-                    complete: function(){
-                        $('#imgLoader').hide();
-                    }
-                });
-            }).catch(swal.noop);
         }
 
         $(document).ready(function(){
@@ -237,14 +201,28 @@
                     "url": "{{ route('bagian.data') }}",
                     "type": "GET"
                 },
+                "ordering": false,
                 "columnDefs": [
                     {
+                        width: "1%",
                         className: "text-center",
-                        targets: [0,3,4,5]
-                    },
-                    {
-                        orderable: false,
-                        targets: [0,1,4,5]
+                        targets: [0]
+                    },{
+                        width: "10%",
+                        className: "text-center",
+                        targets: [2]
+                    },{
+                        width: "17%",
+                        className: "text-center",
+                        targets: [3]
+                    },{
+                        width: "15%",
+                        className: "text-center",
+                        targets: [4]
+                    },{
+                        width: "1%",
+                        className: "text-center",
+                        targets: [5]
                     }
                 ]
             });
@@ -261,6 +239,10 @@
                         validators: {
                             notEmpty: {
                                 message: 'Kolom harus diisi !'
+                            },
+                            stringLength: {
+                                max: 150,
+                                message: 'Maksimal 150 karakter yang diperbolehkan'
                             }
                         }
                     },
@@ -268,10 +250,18 @@
                         validators: {
                             notEmpty: {
                                 message: 'Kolom harus diisi !'
+                            },
+                            stringLength: {
+                                max: 10,
+                                message: 'Maksimal 10 karakter yang diperbolehkan'
                             }
                         }
                     }
                 }
+            }).on('success.field.bv', function(e, data){
+                var $parent = data.element.parents('.form-group');
+                $parent.removeClass('has-success');
+                $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]').hide();
             }).on('success.form.bv', function(e){
                 e.preventDefault();
                 var id = $('#id_bagian').val();
@@ -304,6 +294,8 @@
                         $('#alertNotif').fadeTo(4000, 500).slideUp(500, function(){
                             $('#alertNotif').slideUp(500);
                         });
+
+                        $('#frmBagian')[0].reset();
                         $('#nama_bagian').focus();
                         $('#btnBatal').hide();
                         oTable.ajax.reload();

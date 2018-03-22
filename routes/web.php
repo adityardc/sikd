@@ -209,13 +209,13 @@ Route::post('/surat_keluar_direktur_eksternal/store', 'coSurat_keluar_dir_eks@st
 Route::post('/surat_keluar_direktur_eksternal/{id?}/update', 'coSurat_keluar_dir_eks@update');
 
 // ROUTE MODUL SURAT MASUK INTERNAL
-Route::get('/surat_masuk_internal', 'coSurat_masuk_int@index')->middleware('auth','role_sekretariat','cek_password')->name('surat_masuk_internal');
+Route::get('/surat_masuk_internal', 'coSurat_masuk_int@index')->middleware('auth','cek_password')->name('surat_masuk_internal');
 Route::get('/surat_masuk_internal/data', 'coSurat_masuk_int@list_suratmasuk')->middleware('auth')->name('surat_masuk_internal.data');
 Route::get('/surat_masuk_internal/{id?}/agenda', 'coSurat_masuk_int@agenda_sentral');
 Route::post('/surat_masuk_internal/store', 'coSurat_masuk_int@store')->name('surat_masuk_internal.simpan');
 
 // ROUTE MODUL SURAT MASUK EKSTERNAL
-Route::get('/surat_masuk_eksternal', 'coSurat_masuk_eks@index')->middleware('auth','role_sekretariat','cek_password')->name('surat_masuk_eksternal');
+Route::get('/surat_masuk_eksternal', 'coSurat_masuk_eks@index')->middleware('auth','cek_password')->name('surat_masuk_eksternal');
 Route::get('/surat_masuk_eksternal/data/klasifikasi', 'coSurat_masuk_eks@listKlasifikasi')->middleware('auth')->name('surat_masuk_eksternal.klasifikasi');
 Route::get('/surat_masuk_eksternal/data/list', 'coSurat_masuk_eks@list')->middleware('auth')->name('surat_masuk_eksternal.list');
 Route::get('/surat_masuk_eksternal/tambah', 'coSurat_masuk_eks@tambah')->middleware('auth')->name('surat_masuk_eksternal.tambah');
@@ -225,32 +225,32 @@ Route::post('/surat_masuk_eksternal/store', 'coSurat_masuk_eks@store')->name('su
 Route::post('/surat_masuk_eksternal/{id?}/update', 'coSurat_masuk_eks@update');
 
 // ROUTE MODUL SURAT MASUK DIREKSI SENTRAL / AGENDA DIREKSI SENTRAL
-Route::get('/agenda_direksi', 'coAgenda_direksi@index')->middleware('auth','role_sekdir','cek_password')->name('agenda_direksi');
+Route::get('/agenda_direksi', 'coAgenda_direksi@index')->middleware('auth','cek_password')->name('agenda_direksi');
 Route::get('/agenda_direksi/data', 'coAgenda_direksi@listSurat_masuk')->middleware('auth')->name('agenda_direksi.data');
 Route::get('/agenda_direksi/{id?}/agenda', 'coAgenda_direksi@agenda_direksi');
 Route::post('/agenda_direksi/store', 'coAgenda_direksi@store')->name('agenda_direksi.simpan');
 
 // ROUTE MODUL SURAT MASUK DIREKSI LANGSUNG / AGENDA DIREKSI LANGSUNG
-Route::get('/agenda_direksi_langsung', 'coAgenda_direksi_langsung@index')->middleware('auth','role_sekdir','cek_password')->name('agenda_direksi_langsung');
+Route::get('/agenda_direksi_langsung', 'coAgenda_direksi_langsung@index')->middleware('auth','cek_password')->name('agenda_direksi_langsung');
 Route::get('/agenda_direksi_langsung/data', 'coAgenda_direksi_langsung@listSurat_masuk')->middleware('auth')->name('agenda_direksi_langsung.data');
 Route::get('/agenda_direksi_langsung/{id?}/agenda', 'coAgenda_direksi_langsung@agenda_direksi_langsung');
 Route::post('/agenda_direksi_langsung/store', 'coAgenda_direksi_langsung@store')->name('agenda_direksi_langsung.simpan');
 
 // ROUTE MODUL SURAT KELUAR DIREKSI / AGENDA DIREKSI
-Route::get('/agenda_sk_direksi', 'coAgenda_sk_direksi@index')->middleware('auth','role_sekdir','cek_password')->name('agenda_sk_direksi');
+Route::get('/agenda_sk_direksi', 'coAgenda_sk_direksi@index')->middleware('auth','cek_password')->name('agenda_sk_direksi');
 Route::get('/agenda_sk_direksi/data', 'coAgenda_sk_direksi@listSurat_keluar')->middleware('auth')->name('agenda_sk_direksi.data');
 Route::get('/agenda_sk_direksi/{id?}/agenda', 'coAgenda_sk_direksi@agenda_sk_direksi');
 Route::post('/agenda_sk_direksi/store', 'coAgenda_sk_direksi@store')->name('agenda_sk_direksi.simpan');
 
 // ROUTE MODUL DISPOSISI DIREKSI SURAT MASUK
-Route::get('/disposisi_direksi_sm', 'coDisposisi_dir_sm@index')->middleware('auth','role_sekdir','cek_password')->name('disposisi_direksi_sm');
+Route::get('/disposisi_direksi_sm', 'coDisposisi_dir_sm@index')->middleware('auth','cek_password')->name('disposisi_direksi_sm');
 Route::get('/disposisi_direksi_sm/data', 'coDisposisi_dir_sm@list')->middleware('auth')->name('disposisi_direksi_sm.data');
 Route::get('/disposisi_direksi_sm/{id?}/disposisi', 'coDisposisi_dir_sm@disposisi');
 Route::get('/disposisi_direksi_sm/{id?}/detail', 'coDisposisi_dir_sm@detail');
 Route::post('/disposisi_direksi_sm/{id?}/update', 'coDisposisi_dir_sm@update');
 
 // ROUTE MODUL DISPOSISI DIREKSI SURAT KELUAR
-Route::get('/disposisi_direksi_sk', 'coDisposisi_dir_sk@index')->middleware('auth','role_sekdir','cek_password')->name('disposisi_direksi_sk');
+Route::get('/disposisi_direksi_sk', 'coDisposisi_dir_sk@index')->middleware('auth','cek_password')->name('disposisi_direksi_sk');
 Route::get('/disposisi_direksi_sk/data', 'coDisposisi_dir_sk@list')->middleware('auth')->name('disposisi_direksi_sk.data');
 Route::get('/disposisi_direksi_sk/{id?}/disposisi', 'coDisposisi_dir_sk@disposisi');
 Route::get('/disposisi_direksi_sk/{id?}/detail', 'coDisposisi_dir_sk@detail');

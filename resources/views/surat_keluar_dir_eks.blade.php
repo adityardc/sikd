@@ -17,12 +17,21 @@
 @endsection
 
 @section('content')
-    @if (Session::has('message'))
-        <div class='alert alert-success alert-dismissible fade in' role='alert'>
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
-            <strong>Sukses !</strong> {{ Session::get('message') }}
+    <div class="row">
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <div class="well bg-purple bordered-right bordered-purple">
+                <b><u>Halaman Surat keluar Direktur - Eksternal</u></b><br>
+                <p class="text-justify">
+                    Halaman ini berisi daftar surat keluar yang dibuat oleh Bagian/Unit Kerja yang ditandatangani oleh Direktur dengan tujuan Eksternal Perusahaan.
+                </p>
+            </div>
         </div>
-    @endif
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            @if (Session::has('status'))
+                {!! Session::get('status') !!}
+            @endif
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12">
             <div class="widget">

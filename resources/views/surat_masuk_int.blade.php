@@ -18,11 +18,17 @@
     <li class="active">Surat Masuk Internal</li>
 @endsection
 
-@section('title')
-    Halaman Surat Masuk Internal
-@endsection
-
 @section('content')
+    <div class="row">
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <div class="well bg-magenta bordered-right bordered-magenta">
+                <b><u>Halaman surat masuk internal</u></b><br>
+                <p class="text-justify">
+                    Halaman ini berisi daftar surat masuk perusahaan dari internal (Bagian Kantor Direksi/Unit Kerja PG). Bagian sentral/sekretariat dapat memberikan nomer agenda sentral sesuai surat yang diterima.
+                </p>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12">
             <div class="widget">
@@ -231,6 +237,18 @@
                             });
 
                             oTableSuratkeluar.fnDraw();
+                        }else if(data.status == 2){
+                            swal({
+                                title: "Gagal !",
+                                text: "Surat masuk sudah diagenda direksi.",
+                                type: "error",
+                            });
+                        }else if(data.status == 3){
+                            swal({
+                                title: "Gagal !",
+                                text: "Surat masuk sudah diagenda sentral.",
+                                type: "error",
+                            });
                         }else{
                             swal('Gagal !', 'Data surat gagal diagenda.', 'error');
                         }

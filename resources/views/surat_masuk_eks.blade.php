@@ -12,17 +12,22 @@
     <li class="active">Surat Masuk Eksternal</li>
 @endsection
 
-@section('title')
-    Halaman Input Surat Masuk Eksternal
-@endsection
-
 @section('content')
-    @if (Session::has('message'))
-        <div class='alert alert-success alert-dismissible fade in' role='alert'>
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
-            <strong>Sukses !</strong> {{ Session::get('message') }}
+    <div class="row">
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <div class="well bg-purple bordered-right bordered-purple">
+                <b><u>Halaman surat masuk eksternal</u></b><br>
+                <p class="text-justify">
+                    Halaman ini berisi daftar surat masuk perusahaan dari eksternal. Bagian sentral/sekretariat dapat melakukan <i>input</i> atau <i>edit</i> surat masuk perusahaan yang berasal dari eksternal (di luar lingkup perusahaan).
+                </p>
+            </div>
         </div>
-    @endif
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            @if (Session::has('status'))
+                {!! Session::get('status') !!}
+            @endif
+        </div>
+    </div>
 	<div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12">
             <div class="widget">

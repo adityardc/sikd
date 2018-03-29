@@ -437,7 +437,6 @@
                             swal('Gagal !', 'Data surat gagal disimpan.', 'error');
                         }
 
-                        $('#btnBatal').hide();
                         $('#frm_karyawan')[0].reset();
                         $('#btnKlasifikasi').show();
                         $('#nama_tujuan').val('').trigger("chosen:updated");

@@ -29,7 +29,7 @@ class coSurat_keluar_kry extends Controller
         $kry = DB::table('tbl_karyawan')->orderBy('id_karyawan')->get();
         $idBagian = DB::table('tbl_bagian')->where('id_bagian', Auth::user()->id_bagian)->first();
         $kdBagian = $idBagian->kode_bagian;
-        return view('form_tambah/add_surat_keluar_kry', compact(['sifat','all','idBagian','kry']));
+        return view('form_tambah/add_surat_keluar_kry', compact(['sifat','all','idBagian','kry','kdBagian']));
     }
 
     public function listKlasifikasi()

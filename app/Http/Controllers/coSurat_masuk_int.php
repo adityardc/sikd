@@ -27,9 +27,8 @@ class coSurat_masuk_int extends Controller
                         ->where('stat_agenda_dir', 0)
                         ->where(function($query){
                             $query->where('jenis_surat', 0);
-                            $query->orWhere('jenis_surat', 2);
                         })
-                        ->orderBy('nomor_surat', 'desc')
+                        ->orderBy('tanggal_surat', 'desc')
         				->get();
         $no = 0;
         $data = array();
@@ -51,7 +50,7 @@ class coSurat_masuk_int extends Controller
             $row[] = $baris;
             $row[] = $list->perihal;
             $row[] = date('d M Y', strtotime($list->tanggal_surat));
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only purple tooltip-purple' onclick='agenda_surat(".$list->id_surat_keluar.")' data-toggle='tooltip' data-placement='top' data-original-title='Agenda Surat' href='javascript:void(0);'><i class='fa fa-pencil'></i></button>";
+            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only magenta tooltip-magenta' onclick='agenda_surat(".$list->id_surat_keluar.")' data-toggle='tooltip' data-placement='top' data-original-title='Agenda Surat' href='javascript:void(0);'><i class='fa fa-pencil'></i></button>";
             $data[] = $row;
         }
 
@@ -78,46 +77,53 @@ class coSurat_masuk_int extends Controller
     {
     	$thn = substr($request->tanggal_agenda, 0, 4);
     	$getNumber = DB::table('tbl_temp_surat_masuk')->where('tahun', $thn)->first();
+        $cek_agenda = DB::table('tbl_agenda_direksi')->where('id_surat_masuk_keluar', $request->id_surat_keluar)->where('jenis_surat', 1)->first();
 
-    	if($getNumber == NULL){
-            $urut = 1;
-            DB::table('tbl_temp_surat_masuk')->insert([
-                'tahun' => $thn,
-                'nomor_urut' => $urut,
+        if($cek_agenda == NULL){
+            if($getNumber == NULL){
+                $urut = 1;
+                DB::table('tbl_temp_surat_masuk')->insert([
+                    'tahun' => $thn,
+                    'nomor_urut' => $urut,
+                    'created_at' => \Carbon\Carbon::now(),
+                    'updated_at' => \Carbon\Carbon::now()
+                ]);
+            }else{
+                $urut = $getNumber->nomor_urut;
+                $urut += 1;
+                DB::table('tbl_temp_surat_masuk')->where('id_temp_surat_masuk', $getNumber->id_temp_surat_masuk)->update([
+                    'nomor_urut' => $urut,
+                    'updated_at' => \Carbon\Carbon::now()
+                ]);
+            }
+
+            DB::table('tbl_surat_masuk')->insert([
+                'jenis_surat' => 0,
+                'id_surat_keluar' => $request->id_surat_keluar,
+                'tanggal_agenda' => $request->tanggal_agenda,
+                'nomor_agenda' => $urut,
+                'tujuan' => $request->id_tujuan,
+                'nomor_surat' => $request->nomor_surat,
+                'tanggal_surat' => $request->tanggal_surat,
+                'perihal' => $request->perihal,
+                'stat_agenda_dir' => 0,
+                'status_filter' => 0,
+                'id_bagian' => $request->id_bagian,
+                'tindasan' => $request->tindasan,
+                'tahun_surat' => $request->tahun_surat,
                 'created_at' => \Carbon\Carbon::now(),
                 'updated_at' => \Carbon\Carbon::now()
             ]);
-        }else{
-            $urut = $getNumber->nomor_urut;
-            $urut += 1;
-            DB::table('tbl_temp_surat_masuk')->where('id_temp_surat_masuk', $getNumber->id_temp_surat_masuk)->update([
-                'nomor_urut' => $urut,
+
+            DB::table('tbl_surat_keluar')->where('id_surat_keluar', $request->id_surat_keluar)->update([
+                'stat_agenda_sentral' => 1,
                 'updated_at' => \Carbon\Carbon::now()
             ]);
+
+            return response()->json(['status'=>'1', 'nomor'=>$urut]);
+        }else{
+            $urut = "";
+            return response()->json(['status'=>'2', 'nomor'=>$urut]);
         }
-
-        DB::table('tbl_surat_masuk')->insert([
-            'jenis_surat' => 0,
-            'id_surat_keluar' => $request->id_surat_keluar,
-            'tanggal_agenda' => $request->tanggal_agenda,
-            'nomor_agenda' => $urut,
-            'tujuan' => $request->id_tujuan,
-            'nomor_surat' => $request->nomor_surat,
-            'tanggal_surat' => $request->tanggal_surat,
-            'perihal' => $request->perihal,
-            'stat_agenda_dir' => 0,
-            'id_bagian' => $request->id_bagian,
-            'tindasan' => $request->tindasan,
-            'tahun_surat' => $request->tahun_surat,
-            'created_at' => \Carbon\Carbon::now(),
-            'updated_at' => \Carbon\Carbon::now()
-        ]);
-
-        DB::table('tbl_surat_keluar')->where('id_surat_keluar', $request->id_surat_keluar)->update([
-            'stat_agenda_sentral' => 1,
-            'updated_at' => \Carbon\Carbon::now()
-        ]);
-
-    	return response()->json(['status'=>'1', 'nomor'=>$urut]);
     }
 }

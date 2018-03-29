@@ -14,9 +14,13 @@
 			<td>Tujuan</td>
 			<td>:</td>
 			<td>
-				@foreach($tujuan as $key => $row)
-	                {{ $key+1 }}. {{ $row->nama_bagian }}<br>
-	            @endforeach
+				@if($detail->tujuan == NULL)
+					{{ $detail->nama_tujuan }}
+				@else
+					@foreach($tujuan as $key => $row)
+		                {{ $key+1 }}. {{ $row->nama_bagian }}<br>
+		            @endforeach
+				@endif
 			</td>
 		</tr>
 		<tr>

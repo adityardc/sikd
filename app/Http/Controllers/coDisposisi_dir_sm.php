@@ -27,11 +27,16 @@ class coDisposisi_dir_sm extends Controller
     public function list(Request $request)
     {
     	$listSurat = DB::table("tbl_agenda_direksi")
-                        ->select('id_agenda','tbl_surat_masuk.nomor_surat','tbl_agenda_direksi.nomor_agenda','tbl_agenda_direksi.tanggal_agenda','tbl_surat_masuk.perihal')
-                        ->join('tbl_surat_masuk', 'tbl_surat_masuk.id_surat_masuk', '=', 'tbl_agenda_direksi.id_surat_masuk_keluar')
-                        ->where('tbl_agenda_direksi.jenis_surat', 0)
+                        ->select('id_agenda','tbl_surat_masuk.nomor_surat','tbl_agenda_direksi.nomor_agenda','tbl_agenda_direksi.tanggal_agenda','tbl_surat_masuk.perihal','tbl_surat_keluar.nomor_surat AS nomor_sk','tbl_surat_keluar.perihal AS perihal_sk')
+                        ->leftJoin('tbl_surat_masuk', 'tbl_surat_masuk.id_surat_masuk', '=', 'tbl_agenda_direksi.id_surat_masuk_keluar')
+                        ->leftJoin('tbl_surat_keluar', 'tbl_surat_keluar.id_surat_keluar', '=', 'tbl_agenda_direksi.id_surat_masuk_keluar')
                         ->where('tbl_agenda_direksi.id_tujuan_dispo', $request->id_direktur)
                         ->where('tbl_agenda_direksi.tahun_agenda', $request->tahun)
+                        ->where(function($query){
+                            $query->where('tbl_agenda_direksi.jenis_surat', 0);
+                            $query->orWhere('tbl_agenda_direksi.jenis_surat', 1);
+                        })
+                        ->orderBy('tbl_agenda_direksi.created_at', 'desc')
                         ->orderBy('tbl_agenda_direksi.nomor_agenda', 'desc')
                         ->get();
         $no = 0;
@@ -43,8 +48,8 @@ class coDisposisi_dir_sm extends Controller
             $row[] = $no;
             $row[] = $list->nomor_agenda;
             $row[] = date('d M Y', strtotime($list->tanggal_agenda));
-            $row[] = $list->nomor_surat;
-            $row[] = $list->perihal;
+            $row[] = ($list->nomor_surat == NULL) ? $list->nomor_sk : $list->nomor_surat;
+            $row[] = ($list->perihal == NULL) ? $list->perihal_sk : $list->perihal;;
             $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only purple tooltip-purple' onclick='detail(".$list->id_agenda.")' data-toggle='tooltip' data-placement='top' data-original-title='Detail Agenda' href='javascript:void(0);'><i class='fa fa-eye'></i></button>
                       <a href='disposisi_direksi_sm/".$list->id_agenda."/disposisi' class='btn btn-default btn-xs shiny icon-only purple tooltip-purple' data-toggle='tooltip' data-placement='top' data-original-title='Disposisi Surat'><i class='fa fa-pencil'></i></a>";
             $data[] = $row;

@@ -34,7 +34,7 @@ class coAgenda_sk_direksi extends Controller
                             $query->where('jenis_surat', 3);
                             $query->orWhere('jenis_surat', 4);
                         })
-                        ->orderBy('tanggal_surat', 'desc')
+                        ->orderBy('created_at', 'desc')
         				->get();
         $no = 0;
         $data = array();
@@ -46,7 +46,7 @@ class coAgenda_sk_direksi extends Controller
             $row[] = $list->nomor_surat;
             $row[] = $list->perihal;
             $row[] = date('d M Y', strtotime($list->tanggal_surat));
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only darkorange tooltip-purple' onclick='agenda_sk_direksi(".$list->id_surat_keluar.")' data-toggle='tooltip' data-placement='top' data-original-title='Agenda Surat' href='javascript:void(0);'><i class='fa fa-pencil'></i></button>";
+            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only darkorange tooltip-darkorange' onclick='agenda_sk_direksi(".$list->id_surat_keluar.")' data-toggle='tooltip' data-placement='top' data-original-title='Agenda Surat' href='javascript:void(0);'><i class='fa fa-pencil'></i></button>";
             $data[] = $row;
         }
 

@@ -77,6 +77,7 @@
                 <div class="widget-body">
                     <p class="text-center"><img src="{{ asset('assets/img/Ellipsis.gif') }}" id="imgLoader"></p>
                     <table class="table bordered-purple table-striped table-bordered table-hover responsive" id="tbldisposisi_sm" width="100%">
+                        <caption>adadas</caption>
                         <thead class="bordered-purple">
                             <tr>
                                 <th class="text-center">#</th>
@@ -159,13 +160,14 @@
 
             // TABLE SURAT MASUK EKSTERNAL DIREKSI
             var oTableSuratdireksi = $('#tbldisposisi_sm').dataTable({
-                initComplete: function(){
+                initComplete: function(setting, json){
                     var api = this.api();
                     $('#tbldisposisi_sm_filter input').off('.DT').on('keyup.DT', function(e){
                         if(e.keyCode == 13){
                             api.search(this.value).draw();
                         }
                     });
+                    $('<caption/>').html(json.caption).prependTo('#tbldisposisi_sm');
                 },
                 "processing": true,
                 "serverSide": true,
@@ -175,6 +177,7 @@
                 "ajax": {
                     "url": "{{ route('disposisi_direksi_sm.data') }}",
                     // "type": "GET"
+                    "caption": "caption",
                     "data": function(d){
                         d.id_direktur = $('#direktur').val();
                         d.tahun = $('#tahun').val();

@@ -31,7 +31,7 @@ class coAgenda_direksi extends Controller
                         ->select('id_surat_masuk','nomor_surat','nomor_agenda','tanggal_agenda','tujuan','perihal')
                         ->whereRaw("((',' || RTRIM(tujuan) || ',') LIKE '%,".$request->id_direktur.",%'
                                     OR (',' || RTRIM(tindasan) || ',') LIKE '%,".$request->id_direktur.",%')
-                                    AND stat_agenda_dir = '0' AND tahun_surat = ".$request->tahun)
+                                    AND stat_agenda_dir = '0' AND status_filter = 1 AND tahun_surat = ".$request->tahun)
                         ->orderBy('nomor_agenda', 'desc')
                         ->get();
         $no = 0;

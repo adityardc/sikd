@@ -28,12 +28,12 @@ class coAgenda_direksi_langsung extends Controller
     public function listSurat_masuk(Request $request)
     {
         $listSurat = DB::table("tbl_surat_keluar")
-                        ->select('id_surat_keluar','nomor_surat','tanggal_surat','tujuan','perihal')
+                        ->select('id_surat_keluar','nomor_surat','tanggal_surat','tujuan','perihal','nama_tujuan')
                         ->join('tbl_bagian', 'tbl_surat_keluar.id_bagian', '=', 'tbl_bagian.id_bagian')
                         ->whereRaw("((',' || RTRIM(tujuan) || ',') LIKE '%,".$request->id_direktur.",%'
                                     OR (',' || RTRIM(tbl_surat_keluar.tindasan) || ',') LIKE '%,".$request->id_direktur.",%')
                                     AND stat_agenda_dir = '0' AND tahun_surat = ".$request->tahun." AND grup_bagian = '1' AND jenis_surat <> 3")
-                        ->orderBy('tanggal_surat', 'desc')
+                        ->orderBy('tbl_surat_keluar.created_at', 'desc')
                         ->get();
         $no = 0;
         $data = array();
@@ -54,7 +54,7 @@ class coAgenda_direksi_langsung extends Controller
             $row[] = $no;
             $row[] = $list->nomor_surat;
             $row[] = date('d M Y', strtotime($list->tanggal_surat));
-            $row[] = $baris;
+            $row[] = ($list->tujuan == "") ? $list->nama_tujuan : $baris;
             $row[] = $list->perihal;
             $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only darkorange tooltip-darkorange' onclick='agenda_direksi(".$list->id_surat_keluar.")' data-toggle='tooltip' data-placement='top' data-original-title='Agenda Surat' href='javascript:void(0);'><i class='fa fa-pencil'></i></button>";
             $data[] = $row;

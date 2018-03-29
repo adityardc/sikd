@@ -218,7 +218,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="{{ set_active_open(['agenda_direksi','agenda_direksi_langsung','disposisi_direksi_sm','disposisi_direksi_sk','agenda_sk_direksi']) }}">
+                    <li class="{{ set_active_open(['agenda_direksi','agenda_direksi_langsung','disposisi_direksi_sm','disposisi_direksi_sk','agenda_sk_direksi','filter_sm_direksi']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-user-secret"></i>
 
@@ -230,6 +230,9 @@
                         </a>
 
                         <ul class="submenu">
+                            <li class="{{ set_active('filter_sm_direksi') }}">
+                                <a href="{{ route('filter_sm_direksi') }}"><span class="menu-text">Filter Surat Masuk Direksi</span></a>
+                            </li>
                             <li class="{{ set_active_open(['disposisi_direksi_sm','disposisi_direksi_sk']) }}">
                                 <a href="" class="menu-dropdown">
                                     <span class="menu-text">
@@ -287,13 +290,13 @@
                     </ul>
                 </div>
                 
-                <div class="page-header position-relative">
+                <!-- <div class="page-header position-relative">
                     <div class="header-title">
                         <h1>
                             @yield('title')
                         </h1>
                     </div>
-                </div>
+                </div> -->
                 
                 <div class="page-body">
                     @yield('content')

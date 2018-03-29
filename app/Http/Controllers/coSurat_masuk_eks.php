@@ -104,19 +104,30 @@ class coSurat_masuk_eks extends Controller
             $arrTindasan = implode(',', $request->tindasan);
         }
 
-        $arrTujuan = implode(',', $request->nama_tujuan);
-        DB::table('tbl_surat_masuk')->where('id_surat_masuk', $id)->update([
-            'tanggal_surat' => $request->tanggal_surat,
-            'nomor_surat' => $request->nomor_surat,
-            'id_klasifikasi' => $request->id_klasifikasi,
-            'nama_pengirim' => $request->nama_pengirim,
-            'tujuan' => $arrTujuan,
-            'perihal' => $request->perihal,
-            'tindasan' => $arrTindasan,
-            'updated_at' => \Carbon\Carbon::now()
-        ]);
-        
-        return Redirect::to('surat_masuk_eksternal')->with('message', 'Data berhasil diubah.');
+        $cek_agenda_dir = DB::table('tbl_agenda_direksi')->where('id_surat_masuk_keluar', $id)->where('jenis_surat', 0)->first();
+        if($cek_agenda_dir == NULL){
+            $arrTujuan = implode(',', $request->nama_tujuan);
+            DB::table('tbl_surat_masuk')->where('id_surat_masuk', $id)->update([
+                'tanggal_surat' => $request->tanggal_surat,
+                'nomor_surat' => $request->nomor_surat,
+                'id_klasifikasi' => $request->id_klasifikasi,
+                'nama_pengirim' => $request->nama_pengirim,
+                'tujuan' => $arrTujuan,
+                'perihal' => $request->perihal,
+                'tindasan' => $arrTindasan,
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+
+            return Redirect::to('surat_masuk_eksternal')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'>
+                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+                                    <strong>Sukses !</strong> Data berhasil diubah.
+                                </div>");
+        }else{
+            return Redirect::to('surat_masuk_eksternal')->with('status', "<div class='alert alert-danger alert-dismissible fade in' role='alert'>
+                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+                                    <strong>Gagal !</strong> Data gagal diperbaharui, sudah diagenda direksi.
+                                </div>");
+        }
     }
 
     public function store(Request $request)
@@ -162,6 +173,7 @@ class coSurat_masuk_eks extends Controller
             'tahun_surat' => $thn,
             'stat_agenda_dir' => 0,
             'id_bagian' => 0,
+            'status_filter' => 0,
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);

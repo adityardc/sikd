@@ -71,7 +71,7 @@ class coSurat_keluar_eks extends Controller
         $konseptor = DB::table("tbl_surat_keluar")
                     ->where('jenis_surat', 1)
                     ->where('id_bagian', Auth::user()->id_bagian)
-                    ->orderBy('tanggal_surat', 'desc')
+                    ->orderBy('created_at', 'desc')
                     ->get();
         $no = 0;
         $data = array();
@@ -97,10 +97,29 @@ class coSurat_keluar_eks extends Controller
                     ->join('tbl_karyawan', 'tbl_surat_keluar.id_konseptor', '=', 'tbl_karyawan.id_karyawan')
                     ->join('users', 'tbl_surat_keluar.id_pembuat', '=', 'users.id')
                     ->where('id_surat_keluar', $id)->first();
+
+        $agenda_dir = DB::table('tbl_agenda_direksi')
+                            ->where('id_surat_masuk_keluar', $id)
+                            ->where(function($query){
+                                $query->where('jenis_surat', 0);
+                                $query->orWhere('jenis_surat', 1);
+                            })->first();
+
         $arrTindasan = explode(',', $detail->tindasan);
         $arrTindasan = array_map('floatval', $arrTindasan);
         $tindasan = DB::table('tbl_bagian')->whereIn('id_bagian', $arrTindasan)->get();
-        return view('modal/modal_detailsk_eksternal', compact(['detail','tindasan']));
+
+        if($agenda_dir != NULL){
+            $arrTujuan_dispo = explode(',', $agenda_dir->tujuan_dispo);
+            $arrTujuan_dispo = array_map('floatval', $arrTujuan_dispo);
+            $tujuan_dispo = DB::table('tbl_bagian')->whereIn('id_bagian', $arrTujuan_dispo)->get();
+
+            $arrDireksi_dispo = explode(',', $agenda_dir->direksi_dispo);
+            $arrDireksi_dispo = array_map('floatval', $arrDireksi_dispo);
+            $direksi_dispo = DB::table('tbl_disposisi_direksi')->whereIn('id_disposisi_direksi', $arrDireksi_dispo)->get();
+        }
+
+        return view('modal/modal_detailsk_eksternal', compact(['detail','tindasan','tujuan_dispo','direksi_dispo','agenda_dir']));
     }
 
     public function ubah($id)
@@ -180,16 +199,33 @@ class coSurat_keluar_eks extends Controller
             $arrTindasan = implode(',', $request->tindasan);
         }
 
-        DB::table('tbl_surat_keluar')->where('id_surat_keluar', $id)->update([
-            'tanggal_surat' => $request->tanggal_surat,
-            'sifat_surat' => $request->sifat_surat,
-            'nama_tujuan' => $request->nama_tujuan,
-            'perihal' => $request->perihal,
-            'id_konseptor' => $request->id_konseptor,
-            'tindasan' => $arrTindasan,
-            'updated_at' => \Carbon\Carbon::now()
-        ]);
-        
-        return Redirect::to('surat_keluar_eksternal')->with('message', 'Data berhasil diubah.');
+        $agenda_dir = DB::table('tbl_agenda_direksi')
+                            ->where('id_surat_masuk_keluar', $id)
+                            ->where(function($query){
+                                $query->where('jenis_surat', 0);
+                                $query->orWhere('jenis_surat', 1);
+                            })->first();
+
+        if($agenda_dir == NULL){
+            DB::table('tbl_surat_keluar')->where('id_surat_keluar', $id)->update([
+                'tanggal_surat' => $request->tanggal_surat,
+                'sifat_surat' => $request->sifat_surat,
+                'nama_tujuan' => $request->nama_tujuan,
+                'perihal' => $request->perihal,
+                'id_konseptor' => $request->id_konseptor,
+                'tindasan' => $arrTindasan,
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+
+            return Redirect::to('surat_keluar_eksternal')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'>
+                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+                    <strong>Sukses !</strong> Data berhasil diubah.
+                </div>");
+        }else{
+            return Redirect::to('surat_keluar_eksternal')->with('status', "<div class='alert alert-danger alert-dismissible fade in' role='alert'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+                <strong>Gagal !</strong> Data gagal diperbaharui, sudah diagenda direksi.
+            </div>");
+        }
     }
 }

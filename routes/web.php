@@ -256,6 +256,12 @@ Route::get('/disposisi_direksi_sk/{id?}/disposisi', 'coDisposisi_dir_sk@disposis
 Route::get('/disposisi_direksi_sk/{id?}/detail', 'coDisposisi_dir_sk@detail');
 Route::post('/disposisi_direksi_sk/{id?}/update', 'coDisposisi_dir_sk@update');
 
+// ROUTE MODUL FILTER SURAT MASUK DIREKSI
+Route::get('/filter_sm_direksi', 'coFilter_sm_direksi@index')->middleware('auth','cek_password')->name('filter_sm_direksi');
+Route::get('/filter_sm_direksi/data', 'coFilter_sm_direksi@list')->middleware('auth')->name('filter_sm_direksi.data');
+Route::get('/filter_sm_direksi/{id?}/detail', 'coFilter_sm_direksi@detail');
+Route::post('/filter_sm_direksi/kirim_terpilih', 'coFilter_sm_direksi@filterSelected')->name('filter_sm_direksi.kirim');
+
 // ===============================================================================================================================================
 
 // LAPORAN

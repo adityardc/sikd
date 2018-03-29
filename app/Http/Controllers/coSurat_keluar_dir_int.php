@@ -108,6 +108,9 @@ class coSurat_keluar_dir_int extends Controller
                     ->join('tbl_karyawan', 'tbl_surat_keluar.id_konseptor', '=', 'tbl_karyawan.id_karyawan')
                     ->join('users', 'tbl_surat_keluar.id_pembuat', '=', 'users.id')
                     ->where('id_surat_keluar', $id)->first();
+
+        $agenda_dir = DB::table('tbl_agenda_direksi')->where('id_surat_masuk_keluar', $id)->where('jenis_surat', 2)->first();
+
         $arrTindasan = explode(',', $detail->tindasan);
         $arrTindasan = array_map('floatval', $arrTindasan);
         $tindasan = DB::table('tbl_bagian')->whereIn('id_bagian', $arrTindasan)->get();
@@ -115,7 +118,18 @@ class coSurat_keluar_dir_int extends Controller
         $arrTujuan = explode(',', $detail->tujuan);
         $arrTujuan = array_map('floatval', $arrTujuan);
         $tujuan = DB::table('tbl_bagian')->whereIn('id_bagian', $arrTujuan)->get();
-        return view('modal/modal_detailsk_dir_int', compact(['detail','tindasan','tujuan']));
+
+        if($agenda_dir != NULL){
+            $arrTujuan_dispo = explode(',', $agenda_dir->tujuan_dispo);
+            $arrTujuan_dispo = array_map('floatval', $arrTujuan_dispo);
+            $tujuan_dispo = DB::table('tbl_bagian')->whereIn('id_bagian', $arrTujuan_dispo)->get();
+
+            $arrDireksi_dispo = explode(',', $agenda_dir->direksi_dispo);
+            $arrDireksi_dispo = array_map('floatval', $arrDireksi_dispo);
+            $direksi_dispo = DB::table('tbl_disposisi_direksi')->whereIn('id_disposisi_direksi', $arrDireksi_dispo)->get();
+        }
+
+        return view('modal/modal_detailsk_dir_int', compact(['detail','tindasan','tujuan','tujuan_dispo','direksi_dispo','agenda_dir']));
     }
 
     public function ubah($id)
@@ -142,18 +156,29 @@ class coSurat_keluar_dir_int extends Controller
             $arrTindasan = implode(',', $request->tindasan);
         }
 
-        $arrTujuan = implode(',', $request->nama_tujuan);
-        DB::table('tbl_surat_keluar')->where('id_surat_keluar', $id)->update([
-            'tanggal_surat' => $request->tanggal_surat,
-            'sifat_surat' => $request->sifat_surat,
-            'tujuan' => $arrTujuan,
-            'perihal' => $request->perihal,
-            'id_konseptor' => $request->id_konseptor,
-            'tindasan' => $arrTindasan,
-            'updated_at' => \Carbon\Carbon::now()
-        ]);
-        
-        return Redirect::to('surat_keluar_direktur_internal')->with('message', 'Data berhasil diubah.');
+        $cek_agenda_dir = DB::table('tbl_agenda_direksi')->where('id_surat_masuk_keluar', $id)->where('jenis_surat', 2)->first();
+        if($cek_agenda_dir == NULL){
+            $arrTujuan = implode(',', $request->nama_tujuan);
+            DB::table('tbl_surat_keluar')->where('id_surat_keluar', $id)->update([
+                'tanggal_surat' => $request->tanggal_surat,
+                'sifat_surat' => $request->sifat_surat,
+                'tujuan' => $arrTujuan,
+                'perihal' => $request->perihal,
+                'id_konseptor' => $request->id_konseptor,
+                'tindasan' => $arrTindasan,
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+
+            return Redirect::to('surat_keluar_direktur_internal')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'>
+                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+                                    <strong>Sukses !</strong> Data berhasil diubah.
+                                </div>");
+        }else{
+            return Redirect::to('surat_keluar_direktur_internal')->with('status', "<div class='alert alert-danger alert-dismissible fade in' role='alert'>
+                                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+                                    <strong>Gagal !</strong> Data gagal diperbaharui, sudah diagenda direksi.
+                                </div>");
+        }
     }
 
     public function store(Request $request)

@@ -72,7 +72,7 @@
                     <span class="widget-caption">Tabel Data Pengguna</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-magenta table-striped table-bordered table-hover responsive" id="tblPengguna">
+                	<table class="table bordered-magenta table-striped table-bordered table-hover responsive" id="tblPengguna" width="100%">
                 		<thead class="bordered-magenta">
                 			<tr>
 	                			<th class="text-center">#</th>

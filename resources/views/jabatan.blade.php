@@ -65,7 +65,7 @@
                     <span class="widget-caption">Tabel Data Jabatan</span>
                 </div>
                 <div class="widget-body">
-                    <table class="table bordered-azure table-striped table-bordered table-hover responsive" id="tblJabatan">
+                    <table class="table bordered-azure table-striped table-bordered table-hover responsive" id="tblJabatan" width="100%">
                         <thead class="bordered-azure">
                             <tr>
                                 <th class="text-center">#</th>

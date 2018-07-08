@@ -17,10 +17,10 @@ class role_sekretariat
     public function handle($request, Closure $next)
     {
         $level = Auth::user()->id_role;
-        if ($level != '7') {
+        if ($level == '2' || $level == '1') {
+            return $next($request);   
+        }else{
             return redirect('/forbidden');
         }
-
-        return $next($request);
     }
 }

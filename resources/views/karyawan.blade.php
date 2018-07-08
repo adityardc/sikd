@@ -174,7 +174,7 @@
                     <span class="widget-caption">Tabel Data Karyawan</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-sky table-striped table-bordered table-hover responsive" id="tblKaryawan">
+                	<table class="table bordered-sky table-striped table-bordered table-hover responsive" id="tblKaryawan" width="100%">
                 		<thead class="bordered-sky">
                 			<tr>
 	                			<th class="text-center">#</th>

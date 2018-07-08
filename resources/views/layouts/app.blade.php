@@ -109,6 +109,7 @@
                             <span class="menu-text">Beranda</span>
                         </a>
                     </li>
+                    @if(Auth::user()->id_role == 1)
                     <li class="{{ set_active_open(['bagian','jabatan','golongan','masakerja','pendidikan','hakakses','karyawan','pengguna','klasifikasi','jenis_surat','sifat_surat','jenis_disposisi','retensi_aktif','retensi_inaktif','retensi_deskripsi']) }}">
                         <a href="#" class="menu-dropdown">
                             <i class="menu-icon fa fa-database"></i>
@@ -280,6 +281,57 @@
                             </li>
                         </ul>
                     </li>
+                    @elseif(Auth::user()->id_role == 2)
+                    <li class="{{ set_active_open(['bagian','jabatan','golongan','masakerja','pendidikan','hakakses','karyawan','pengguna','klasifikasi','jenis_surat','sifat_surat','jenis_disposisi','retensi_aktif','retensi_inaktif','retensi_deskripsi']) }}">
+                        <a href="#" class="menu-dropdown">
+                            <i class="menu-icon fa fa-database"></i>
+
+                            <span class="menu-text">
+                                Master Data
+                            </span>
+
+                            <i class="menu-expand"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li class="{{ set_active('jenis_disposisi') }}">
+                                <a href="{{ route('jenis_disposisi') }}"><span class="menu-text">Data Jenis Disposisi Direksi</span></a>
+                            </li>
+                            <li class="{{ set_active('klasifikasi') }}">
+                                <a href="{{ route('klasifikasi') }}"><span class="menu-text">Data Klasifikasi</span></a>
+                            </li>
+                            <li class="{{ set_active('retensi_aktif') }}">
+                                <a href="{{ route('retensi_aktif') }}"><span class="menu-text">Data Retensi Aktif</span></a>
+                            </li>
+                            <li class="{{ set_active('retensi_inaktif') }}">
+                                <a href="{{ route('retensi_inaktif') }}"><span class="menu-text">Data Retensi Inaktif</span></a>
+                            </li>
+                            <li class="{{ set_active('retensi_deskripsi') }}">
+                                <a href="{{ route('retensi_deskripsi') }}"><span class="menu-text">Data Retensi Deskripsi</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="{{ set_active_open(['surat_keluar_int','surat_keluar_int.tambah','surat_keluar_eks','surat_keluar_eks.tambah','surat_keluar_karyawan','surat_keluar_karyawan.tambah','surat_keluar_direktur_internal','surat_keluar_direktur_internal.tambah','surat_keluar_direktur_eksternal','surat_keluar_direktur_eksternal.tambah','surat_masuk_eksternal','surat_masuk_eksternal.tambah','surat_masuk_internal']) }}">
+                        <a href="#" class="menu-dropdown">
+                            <i class="menu-icon fa fa-book"></i>
+
+                            <span class="menu-text">
+                                Agenda Sentral
+                            </span>
+
+                            <i class="menu-expand"></i>
+                        </a>
+
+                        <ul class="submenu">
+                            <li class="{{ set_active(['surat_masuk_eksternal','surat_masuk_eksternal.tambah']) }}">
+                                <a href="{{ route('surat_masuk_eksternal') }}"><span class="menu-text">Surat Masuk Eksternal</span></a>
+                            </li>
+                            <li class="{{ set_active('surat_masuk_internal') }}">
+                                <a href="{{ route('surat_masuk_internal') }}"><span class="menu-text">Surat Masuk Internal</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    @endif
                 </ul>
             </div>
 

@@ -67,7 +67,7 @@
                     <span class="widget-caption">Tabel Data Masa Kerja</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-darkorange table-striped table-bordered table-hover responsive" id="tblMasakerja">
+                	<table class="table bordered-darkorange table-striped table-bordered table-hover responsive" id="tblMasakerja" width="100%">
                 		<thead class="bordered-darkorange">
                 			<tr>
 	                			<th class="text-center">#</th>

@@ -67,7 +67,7 @@
                     <span class="widget-caption">Tabel Data Hak Akses</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-maroon table-striped table-bordered table-hover responsive" id="tblHakAkses">
+                	<table class="table bordered-maroon table-striped table-bordered table-hover responsive" id="tblHakAkses" width="100%">
                 		<thead class="bordered-maroon">
                 			<tr>
 	                			<th class="text-center">#</th>

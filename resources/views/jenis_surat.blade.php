@@ -77,7 +77,7 @@
                     <span class="widget-caption">Tabel Data Jenis Surat Direksi</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-danger table-striped table-bordered table-hover responsive" id="tblJenis">
+                	<table class="table bordered-danger table-striped table-bordered table-hover responsive" id="tblJenis" width="100%">
                 		<thead class="bordered-danger">
                 			<tr>
 	                			<th class="text-center">#</th>

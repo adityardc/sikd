@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class cek_role
+class role_admin
 {
     /**
      * Handle an incoming request.

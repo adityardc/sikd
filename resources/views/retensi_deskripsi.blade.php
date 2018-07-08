@@ -63,7 +63,7 @@
                     <span class="widget-caption">Tabel Data Retensi Deskripsi Klasifikasi</span>
                 </div>
                 <div class="widget-body">
-                    <table class="table bordered-danger table-striped table-bordered table-hover responsive" id="tblRetensi">
+                    <table class="table bordered-danger table-striped table-bordered table-hover responsive" id="tblRetensi" width="100%">
                         <thead class="bordered-danger">
                             <tr>
                                 <th class="text-center">#</th>

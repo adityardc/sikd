@@ -67,7 +67,7 @@
                     <span class="widget-caption">Tabel Data Golongan</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-purple table-striped table-bordered table-hover responsive" id="tblGolongan">
+                	<table class="table bordered-purple table-striped table-bordered table-hover responsive" id="tblGolongan" width="100%">
                 		<thead class="bordered-purple">
                 			<tr>
 	                			<th class="text-center">#</th>

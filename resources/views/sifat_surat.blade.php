@@ -79,7 +79,7 @@
                     <span class="widget-caption">Tabel Data Sifat Surat</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-palegreen table-striped table-bordered table-hover responsive" id="tblSifat">
+                	<table class="table bordered-palegreen table-striped table-bordered table-hover responsive" id="tblSifat" width="100%">
                 		<thead class="bordered-palegreen">
                 			<tr>
 	                			<th class="text-center">#</th>

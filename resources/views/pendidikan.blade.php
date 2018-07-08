@@ -67,7 +67,7 @@
                     <span class="widget-caption">Tabel Data Pendidikan</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-blue table-striped table-bordered table-hover responsive" id="tblPendidikan">
+                	<table class="table bordered-blue table-striped table-bordered table-hover responsive" id="tblPendidikan" width="100%">
                 		<thead class="bordered-blue">
                 			<tr>
 	                			<th class="text-center">#</th>

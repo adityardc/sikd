@@ -17,7 +17,7 @@ class role_sekdir
     public function handle($request, Closure $next)
     {
         $level = Auth::user()->id_role;
-        if ($level != '6') {
+        if ($level != '3') {
             return redirect('/forbidden');
         }
         

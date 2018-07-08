@@ -63,7 +63,7 @@
                     <span class="widget-caption">Tabel Data Jenis Disposisi Direksi</span>
                 </div>
                 <div class="widget-body">
-                	<table class="table bordered-purple table-striped table-bordered table-hover responsive" id="tblDisposisi">
+                	<table class="table bordered-purple table-striped table-bordered table-hover responsive" id="tblDisposisi" width="100%">
                 		<thead class="bordered-purple">
                 			<tr>
 	                			<th class="text-center">#</th>

@@ -12,12 +12,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use DB;
+use Redirect;
 
 class coPendidikan extends Controller
 {
     public function index()
     {
-    	return view('pendidikan');
+    	return view('mod_pendidikan/index_pendidikan');
     }
 
     public function listData()
@@ -30,11 +31,17 @@ class coPendidikan extends Controller
             $row = array();
             $row[] = $no;
             $row[] = (($list->status_pendidikan == "Y") ? "<span class='badge badge-success tooltip-success' data-toggle='tooltip' data-placement='top' title='Status Aktif'><i class='menu-icon fa fa-check'></i></span> " : "<span class='badge badge-danger tooltip-danger' data-toggle='tooltip' data-placement='top' title='Status Non Aktif'><i class='menu-icon fa fa-close'></i></span> ").$list->nama_pendidikan;
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_pendidikan.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>";
+            $row[] = "<a href='pendidikan/".$list->id_pendidikan."/edit' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' data-toggle='tooltip' data-placement='top' data-original-title='Ubah Data'><i class='fa fa-pencil'></i></a>";
             $data[] = $row;
         }
 
         return DataTables::of($data)->escapeColumns([])->make(true);
+    }
+
+    public function create()
+    {
+        $url = url('pendidikan/store');
+        return view('mod_pendidikan/tambah_pendidikan', compact(['url']));
     }
 
     public function store(Request $request)
@@ -45,13 +52,17 @@ class coPendidikan extends Controller
     		'created_at' => \Carbon\Carbon::now(),
     		'updated_at' => \Carbon\Carbon::now()
     	]);
-    	return response()->json(['status'=>'1']);
+    	
+        return Redirect::to('pendidikan/create')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Pendidikan <strong>".$request->nama_pendidikan."</strong> berhasil disimpan.
+        </div>");
     }
 
     public function edit($id)
     {
-        $ddk = DB::table('tbl_pendidikan')->where('id_pendidikan', $id)->first();
-        echo json_encode($ddk);
+        $data = DB::table('tbl_pendidikan')->where('id_pendidikan', $id)->first();
+        $url = url('pendidikan/'.$id.'/update');
+        return view('mod_pendidikan/ubah_pendidikan', compact(['data','url']));
     }
 
     public function update(Request $request, $id)
@@ -61,6 +72,9 @@ class coPendidikan extends Controller
             'status_pendidikan' => $request->status_pendidikan,
         	'updated_at' => \Carbon\Carbon::now()
         ]);
-        return response()->json(['status'=>'2']);
+        
+        return Redirect::to('pendidikan')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Pendidikan <strong>".$request->nama_pendidikan."</strong> berhasil disimpan.
+        </div>");
     }
 }

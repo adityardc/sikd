@@ -13,14 +13,14 @@ use Illuminate\Http\Request;
 use DB;
 use DataTables;
 use Hash;
+use Redirect;
+use Validator;
 
 class coPengguna extends Controller
 {
     public function index()
     {
-    	$karyawan = DB::table('tbl_karyawan')->orderBy('nama_karyawan')->get();
-    	$role = DB::table('tbl_hakakses')->get();
-    	return view('pengguna', compact(['karyawan','role']));
+    	return view('mod_pengguna/index_pengguna');
     }
 
     public function listData()
@@ -36,64 +36,101 @@ class coPengguna extends Controller
             $row[] = $list->email;
             $row[] = $list->nama_bagian;
             $row[] = $list->nama_hakakses;
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>
-            		  <button type='button' class='btn btn-default btn-xs shiny icon-only danger tooltip-danger' onclick='deleteData(".$list->id.")' data-toggle='tooltip' data-placement='top' data-original-title='Hapus Data' href='javascript:void(0);'><i class='fa fa-times'></i></button>
-                      <button type='button' class='btn btn-default btn-xs shiny icon-only purple tooltip-purple' onclick='editPassword(".$list->id.")' data-toggle='tooltip' data-placement='top' data-original-title='Reset Password' href='javascript:void(0);'><i class='fa fa-file-photo-o'></i></button>";
+            $row[] = "<a href='pengguna/".$list->id."/edit' class='btn btn-default btn-xs shiny icon-only magenta tooltip-magenta' data-toggle='tooltip' data-placement='top' data-original-title='Ubah Data'><i class='fa fa-pencil'></i></a>
+            <a href='pengguna/".$list->id."/resetpassword' class='btn btn-default btn-xs shiny icon-only magenta tooltip-magenta' data-toggle='tooltip' data-placement='top' data-original-title='Reset Password'><i class='fa fa-eye'></i></a>";
             $data[] = $row;
         }
 
         return DataTables::of($data)->escapeColumns([])->make(true);
     }
 
+    public function create()
+    {
+        $karyawan = DB::table('tbl_karyawan')->orderBy('nama_karyawan')->get();
+        $role = DB::table('tbl_hakakses')->get();
+        $url = url('pengguna/store');
+        return view('mod_pengguna/tambah_pengguna', compact(['url','karyawan','role']));
+    }
+
     public function store(Request $request)
     {
-    	$cekKaryawan = DB::table('users')->where('id_karyawan', $request->karyawan)->first();
-    	if($cekKaryawan == NULL){
-    		$detailKaryawan = DB::table('tbl_karyawan')->where('id_karyawan', $request->karyawan)->first();
-	    	DB::table('users')->insert([
-	    		'name' => $detailKaryawan->nama_karyawan,
-	    		'email' => $detailKaryawan->email,
-	    		'password' => Hash::make("123456"),
-	    		'id_role' => $request->role,
-	    		'id_karyawan' => $request->karyawan,
+        $validation = Validator::make(request()->all(), [
+            'karyawan' => 'unique:users,id_karyawan'
+        ]);
+
+        if($validation->fails()){
+            $data = DB::table('users')->where('id_karyawan', $request->karyawan)->first();
+            return Redirect::to('pengguna/create')->with('status', "<div class='alert alert-danger alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Gagal !</strong> Akun karyawan <strong>".$data->name."</strong> sudah terdaftar.
+        </div>");
+        }else{
+            $detailKaryawan = DB::table('tbl_karyawan')
+                                ->select('tbl_karyawan.*','tbl_bagian.grup_bagian')
+                                ->join('tbl_bagian','tbl_karyawan.id_bagian','=','tbl_bagian.id_bagian')
+                                ->where('tbl_karyawan.id_karyawan', $request->karyawan)->first();
+
+            DB::table('users')->insert([
+                'name' => $detailKaryawan->nama_karyawan,
+                'email' => $detailKaryawan->email,
+                'password' => Hash::make("ptpn9jaya"),
+                'id_role' => $request->role,
+                'id_karyawan' => $request->karyawan,
                 'id_bagian' => $detailKaryawan->id_bagian,
-	    		'created_at' => \Carbon\Carbon::now(),
-	    		'updated_at' => \Carbon\Carbon::now()
-	    	]);
-    		return response()->json(['status'=>'1']);
-    	}else{
-    		return response()->json(['status'=>'3']);
-    	}
+                'status_pengguna' => $request->status_pengguna,
+                'grup_bagian' => $detailKaryawan->grup_bagian,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+
+            return Redirect::to('pengguna/create')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Akun karyawan <strong>".$detailKaryawan->nama_karyawan."</strong> berhasil di daftarkan.
+        </div>");
+        }
     }
 
     public function edit($id)
     {
-        $pengguna = DB::table('users')->where('id', $id)->first();
-        echo json_encode($pengguna);
+        $data = DB::table('users')->where('id', $id)->first();
+        $url = url('pengguna/'.$id.'/update');
+        $role = DB::table('tbl_hakakses')->get();
+        return view('mod_pengguna/ubah_pengguna', compact(['data','url','role']));
+    }
+
+    public function resetpassword($id)
+    {
+        $data = DB::table('users')->where('id', $id)->first();
+        $url = url('pengguna/'.$id.'/updatepassword');
+        $role = DB::table('tbl_hakakses')->get();
+        return view('mod_pengguna/reset_password_pengguna', compact(['data','url','role']));
     }
 
     public function update(Request $request, $id)
     {
         DB::table('users')->where('id', $id)->update([
         	'id_role' => $request->role,
+            'status_pengguna' => $request->status_pengguna,
             'updated_at' => \Carbon\Carbon::now()
         ]);
-        return response()->json(['status'=>'2']);
+
+        $data = DB::table('users')->where('id', $id)->first();
+        
+        return Redirect::to('pengguna')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Akun <strong>".$data->name."</strong> berhasil disimpan.
+        </div>");
     }
 
-    public function updatePassword(Request $request, $id)
+    public function updatepassword(Request $request, $id)
     {
         DB::table('users')->where('id', $id)->update([
-        	'password' => Hash::make("123456"),
+            'password' => Hash::make("ptpn9jaya"),
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now()
         ]);
-        return response()->json(['status'=>'3']);
-    }
 
-    public function destroy($id)
-    {
-        DB::table('users')->where('id', $id)->delete();
-        return response()->json(['status'=>'3']);
+        $data = DB::table('users')->where('id', $id)->first();
+        
+        return Redirect::to('pengguna')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Password Akun <strong>".$data->name."</strong> berhasil direset.
+        </div>");
     }
 }

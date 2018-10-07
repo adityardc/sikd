@@ -12,12 +12,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use DB;
+use Redirect;
+use Auth;
 
 class coBagian extends Controller
 {
     public function index()
     {
-    	return view('bagian');
+    	return view('mod_bagian/index_bagian');
     }
 
     public function listData()
@@ -33,7 +35,7 @@ class coBagian extends Controller
             $row[] = $list->kode_bagian;
             $row[] = $list->grup;
             $row[] = $list->status;
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_bagian.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>";
+            $row[] = ((Auth::user()->id_role == 1) ? "<a href='bagian/".$list->id_bagian."/edit' class='btn btn-default btn-xs shiny icon-only palegreen tooltip-palegreen' data-toggle='tooltip' data-placement='top' data-original-title='Ubah Data'><i class='fa fa-pencil'></i></a>" : "-");
             $data[] = $row;
         }
 
@@ -51,13 +53,23 @@ class coBagian extends Controller
     		'created_at' => \Carbon\Carbon::now(),
     		'updated_at' => \Carbon\Carbon::now()
     	]);
-    	return response()->json(['status'=>'1']);
+
+        return Redirect::to('bagian/create')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Bagian <strong>".$request->nama_bagian."</strong> berhasil disimpan.
+        </div>");
+    }
+
+    public function create()
+    {
+        $url = url('bagian/store');
+        return view('mod_bagian/tambah_bagian', compact(['url']));
     }
 
     public function edit($id)
     {
-        $bagian = DB::table('tbl_bagian')->where('id_bagian', $id)->first();
-        echo json_encode($bagian);
+        $data = DB::table('tbl_bagian')->where('id_bagian', $id)->first();
+        $url = url('bagian/'.$id.'/update');
+        return view('mod_bagian/ubah_bagian', compact(['data', 'url']));
     }
 
     public function update(Request $request, $id)
@@ -70,6 +82,9 @@ class coBagian extends Controller
             'status_bagian' => $request->status_bagian,
             'updated_at' => \Carbon\Carbon::now()
         ]);
-        return response()->json(['status'=>'2']);
+
+        return Redirect::to('bagian')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Bagian <strong>".$request->nama_bagian."</strong> berhasil diubah.
+        </div>");
     }
 }

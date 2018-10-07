@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use DB;
+use Hash;
 
 class CreateUsersTable extends Migration
 {
@@ -21,6 +23,19 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        DB::table('users')->insert([
+            'name' => $detailKaryawan->nama_karyawan,
+            'email' => $detailKaryawan->email,
+            'password' => Hash::make("ptpn9jaya"),
+            'id_role' => $request->role,
+            'id_karyawan' => $request->karyawan,
+            'id_bagian' => $detailKaryawan->id_bagian,
+            'status_pengguna' => $request->status_pengguna,
+            'grup_bagian' => $detailKaryawan->grup_bagian,
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now()
+        ]);
     }
 
     /**

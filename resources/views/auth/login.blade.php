@@ -4,137 +4,73 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="SIK - PTPN IX" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <title>PTPN IX</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="shortcut icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/x-icon">
+
+    <!--Basic Styles-->
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link id="bootstrap-rtl-link" href="#" rel="stylesheet" />
+    <link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet" />
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="{{ asset('assets/css/beyond.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/demo.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/animate.min.css') }}" rel="stylesheet" />
+    <link id="skin-link" href="#" rel="stylesheet" type="text/css" />
+
+    <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        Sistem Informasi Kesekretariatan - PTPN IX
-                    </a>
-                </div>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
-                    </ul>
+    <div class="login-container animated fadeInDown">
+        <div class="loginbox bg-white">
+            <div class="loginbox-title">LOGIN</div>
+            <div class="loginbox-social">
+                <div class="social-title" style="padding-bottom: 5%">Sistem Informasi Kesekretariatan</div>
+                <div class="text-center">
+                    <img src="{{ asset('assets/img/Logo-kecil.png') }}">
                 </div>
             </div>
-        </nav>
-
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Login</div>
-
-                        <div class="panel-body">
-                            <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                                {{ csrf_field() }}
-
-                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                    <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                                    <div class="col-md-6">
-                                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
-
-                                        @if ($errors->has('email'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('email') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <label for="password" class="col-md-4 control-label">Password</label>
-
-                                    <div class="col-md-6">
-                                        <input id="password" type="password" class="form-control" name="password" required>
-
-                                        @if ($errors->has('password'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('password') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <!-- <div class="form-group">
-                                    <div class="col-md-6 col-md-offset-4">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                                <div class="form-group">
-                                    <div class="col-md-8 col-md-offset-4">
-                                        <button type="submit" class="btn btn-primary">
-                                            Login
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            <div class="loginbox-or">
+                <div class="or-line"></div>
+                <div class="or">.:: SIK ::.</div>
             </div>
+            <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                {{ csrf_field() }}
+                <div class="loginbox-textbox {{ $errors->has('email') ? ' has-error' : '' }}">
+                    <input type="text" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required autofocus />
+                    @if ($errors->has('email'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('email') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="loginbox-textbox {{ $errors->has('password') ? ' has-error' : '' }}">
+                    <input type="password" class="form-control" placeholder="Password" name="password" value="{{ old('password') }}" required/>
+                    @if ($errors->has('password'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('password') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="loginbox-submit">
+                    <input type="submit" class="btn btn-primary btn-block" value="Login">
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('assets/js/skins.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/slimscroll/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('assets/js/beyond.js') }}"></script>
 </body>
 </html>

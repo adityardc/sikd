@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         'cek_password' => \App\Http\Middleware\cek_password::class,
         'role_admin' => \App\Http\Middleware\role_admin::class,
         'role_sekdir' => \App\Http\Middleware\role_sekdir::class,
-        'role_sekretariat' => \App\Http\Middleware\role_sekretariat::class
+        'role_sekretariat' => \App\Http\Middleware\role_sekretariat::class,
+        'role_pengguna' => \App\Http\Middleware\role_pengguna::class
     ];
 }

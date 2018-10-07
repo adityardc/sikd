@@ -12,12 +12,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use DataTables;
+use Redirect;
 
 class coJenis_surat extends Controller
 {
     public function index()
     {
-    	return view('jenis_surat');
+    	return view('mod_jenis_surat/index_jenis_surat');
     }
 
     public function listData()
@@ -32,11 +33,17 @@ class coJenis_surat extends Controller
             $row[] = (($list->status_jenis == "Y") ? "<span class='badge badge-success tooltip-success' data-toggle='tooltip' data-placement='top' title='Status Aktif'><i class='menu-icon fa fa-check'></i></span> " : "<span class='badge badge-danger tooltip-danger' data-toggle='tooltip' data-placement='top' title='Status Non Aktif'><i class='menu-icon fa fa-close'></i></span> ").$list->nama_jenis;
             $row[] = $list->deskripsi;
             $row[] = $list->kode_jenis;
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_jenis_surat.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>";
+            $row[] = "<a href='jenis_surat/".$list->id_jenis_surat."/edit' class='btn btn-default btn-xs shiny icon-only azure tooltip-azure' data-toggle='tooltip' data-placement='top' data-original-title='Ubah Data'><i class='fa fa-pencil'></i></a>";
             $data[] = $row;
         }
 
         return DataTables::of($data)->escapeColumns([])->make(true);
+    }
+
+    public function create()
+    {
+        $url = url('jenis_surat/store');
+        return view('mod_jenis_surat/tambah_jenis_surat', compact(['url']));
     }
 
     public function store(Request $request)
@@ -49,13 +56,17 @@ class coJenis_surat extends Controller
     		'created_at' => \Carbon\Carbon::now(),
     		'updated_at' => \Carbon\Carbon::now()
     	]);
-    	return response()->json(['status'=>'1']);
+    	
+        return Redirect::to('jenis_surat/create')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Jabatan <strong>".$request->nama_jenis."</strong> berhasil disimpan.
+        </div>");
     }
 
     public function edit($id)
     {
-        $jns = DB::table('tbl_jenis_surat')->where('id_jenis_surat', $id)->first();
-        echo json_encode($jns);
+        $data = DB::table('tbl_jenis_surat')->where('id_jenis_surat', $id)->first();
+        $url = url('jenis_surat/'.$id.'/update');
+        return view('mod_jenis_surat/ubah_jenis_surat', compact(['data','url']));
     }
 
     public function update(Request $request, $id)
@@ -67,6 +78,9 @@ class coJenis_surat extends Controller
             'status_jenis' => $request->status_jenis,
         	'updated_at' => \Carbon\Carbon::now()
         ]);
-        return response()->json(['status'=>'2']);
+        
+        return Redirect::to('jenis_surat')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Jabatan <strong>".$request->nama_jenis."</strong> berhasil disimpan.
+        </div>");
     }
 }

@@ -12,12 +12,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use DB;
+use Redirect;
 
 class coJabatan extends Controller
 {
     public function index()
     {
-    	return view('jabatan');
+    	return view('mod_jabatan/index_jabatan');
     }
 
     public function listData()
@@ -30,11 +31,17 @@ class coJabatan extends Controller
             $row = array();
             $row[] = $no;
             $row[] = (($list->status_jabatan == "Y") ? "<span class='badge badge-success tooltip-success' data-toggle='tooltip' data-placement='top' title='Status Aktif'><i class='menu-icon fa fa-check'></i></span> " : "<span class='badge badge-danger tooltip-danger' data-toggle='tooltip' data-placement='top' title='Status Non Aktif'><i class='menu-icon fa fa-close'></i></span> ").$list->nama_jabatan;
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_jabatan.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>";
+            $row[] = "<a href='jabatan/".$list->id_jabatan."/edit' class='btn btn-default btn-xs shiny icon-only azure tooltip-azure' data-toggle='tooltip' data-placement='top' data-original-title='Ubah Data'><i class='fa fa-pencil'></i></a>";
             $data[] = $row;
         }
 
         return DataTables::of($data)->escapeColumns([])->make(true);
+    }
+
+    public function create()
+    {
+        $url = url('jabatan/store');
+        return view('mod_jabatan/tambah_jabatan', compact(['url']));
     }
 
     public function store(Request $request)
@@ -45,13 +52,17 @@ class coJabatan extends Controller
     		'created_at' => \Carbon\Carbon::now(),
     		'updated_at' => \Carbon\Carbon::now()
     	]);
-    	return response()->json(['status'=>'1']);
+    	
+        return Redirect::to('jabatan/create')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Jabatan <strong>".$request->nama_jabatan."</strong> berhasil disimpan.
+        </div>");
     }
 
     public function edit($id)
     {
-        $jabatan = DB::table('tbl_jabatan')->where('id_jabatan', $id)->first();
-        echo json_encode($jabatan);
+        $data = DB::table('tbl_jabatan')->where('id_jabatan', $id)->first();
+        $url = url('jabatan/'.$id.'/update');
+        return view('mod_jabatan/ubah_jabatan', compact(['data','url']));
     }
 
     public function update(Request $request, $id)
@@ -61,6 +72,9 @@ class coJabatan extends Controller
             'status_jabatan' => $request->status_jabatan,
         	'updated_at' => \Carbon\Carbon::now()
         ]);
-        return response()->json(['status'=>'2']);
+
+        return Redirect::to('jabatan')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Jabatan <strong>".$request->nama_jabatan."</strong> berhasil disimpan.
+        </div>");
     }
 }

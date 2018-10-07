@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use DB;
+use Auth;
 
 class coKlasifikasi extends Controller
 {
@@ -20,7 +21,7 @@ class coKlasifikasi extends Controller
         $aktif = DB::table('tbl_retensi_aktif')->orderBy('id_retensi_aktif')->get();
         $inaktif = DB::table('tbl_retensi_inaktif')->orderBy('id_retensi_inaktif')->get();
         $desk = DB::table('tbl_retensi_keterangan')->orderBy('id_retensi_ket')->get();
-    	return view('klasifikasi', compact(['aktif','inaktif','desk']));
+    	return view('mod_klasifikasi/index_klasifikasi', compact(['aktif','inaktif','desk']));
     }
 
     public function listData()
@@ -35,7 +36,7 @@ class coKlasifikasi extends Controller
             $row[] = $list->kode_klas;
             $row[] = $list->nama_klas;
             $row[] = (($list->status_klas == "Y") ? "<span class='badge badge-success tooltip-success' data-toggle='tooltip' data-placement='top' title='Status Aktif'><i class='menu-icon fa fa-check'></i></span> " : "<span class='badge badge-danger tooltip-danger' data-toggle='tooltip' data-placement='top' title='Status Non Aktif'><i class='menu-icon fa fa-close'></i></span> ");
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_klas.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>";
+            $row[] = ((Auth::user()->id_role == 1) ? "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_klas.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>" : "-");
             $data[] = $row;
         }
 

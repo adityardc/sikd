@@ -12,12 +12,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use DB;
+use Redirect;
 
 class coGolongan extends Controller
 {
     public function index()
     {
-    	return view('golongan');
+    	return view('mod_golongan/index_golongan');
     }
 
     public function listData()
@@ -30,11 +31,17 @@ class coGolongan extends Controller
             $row = array();
             $row[] = $no;
             $row[] = (($list->status_golongan == "Y") ? "<span class='badge badge-success tooltip-success' data-toggle='tooltip' data-placement='top' title='Status Aktif'><i class='menu-icon fa fa-check'></i></span> " : "<span class='badge badge-danger tooltip-danger' data-toggle='tooltip' data-placement='top' title='Status Non Aktif'><i class='menu-icon fa fa-close'></i></span> ").$list->nama_golongan;
-            $row[] = "<button type='button' class='btn btn-default btn-xs shiny icon-only blue tooltip-blue' onclick='editData(".$list->id_golongan.")' data-toggle='tooltip' data-placement='top' title='Ubah Data'><span class='fa fa-pencil'></span></button>";
+            $row[] = "<a href='golongan/".$list->id_golongan."/edit' class='btn btn-default btn-xs shiny icon-only azure tooltip-azure' data-toggle='tooltip' data-placement='top' data-original-title='Ubah Data'><i class='fa fa-pencil'></i></a>";
             $data[] = $row;
         }
 
         return DataTables::of($data)->escapeColumns([])->make(true);
+    }
+
+    public function create()
+    {
+        $url = url('golongan/store');
+        return view('mod_golongan/tambah_golongan', compact(['url']));
     }
 
     public function store(Request $request)
@@ -45,13 +52,17 @@ class coGolongan extends Controller
     		'created_at' => \Carbon\Carbon::now(),
     		'updated_at' => \Carbon\Carbon::now()
     	]);
-    	return response()->json(['status'=>'1']);
+    	
+        return Redirect::to('golongan/create')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Golongan <strong>".$request->nama_golongan."</strong> berhasil disimpan.
+        </div>");
     }
 
     public function edit($id)
     {
-        $gol = DB::table('tbl_golongan')->where('id_golongan', $id)->first();
-        echo json_encode($gol);
+        $data = DB::table('tbl_golongan')->where('id_golongan', $id)->first();
+        $url = url('golongan/'.$id.'/update');
+        return view('mod_golongan/ubah_golongan', compact(['data','url']));
     }
 
     public function update(Request $request, $id)
@@ -61,6 +72,9 @@ class coGolongan extends Controller
             'status_golongan' => $request->status_golongan,
         	'updated_at' => \Carbon\Carbon::now()
         ]);
-        return response()->json(['status'=>'2']);
+        
+        return Redirect::to('golongan')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
+            <strong>Sukses !</strong> Golongan <strong>".$request->nama_golongan."</strong> berhasil disimpan.
+        </div>");
     }
 }

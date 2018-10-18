@@ -72,7 +72,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            @if($data->foto != NULL)
                                             <img src="{{ url($data->foto) }}" class="header-avatar" height="200" width="200">
+                                            @else
+                                            Foto belum diupload !
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

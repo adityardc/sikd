@@ -48,14 +48,14 @@ class coSifatsurat extends Controller
 
     public function store(Request $request)
     {
-    	// DB::table('tbl_sifat_surat')->insert([
-    	// 	'nama_sifat' => $request->nama_sifat,
-    	// 	'kode_sifat' => $request->kode_sifat,
-    	// 	'deskripsi' => $request->deskripsi,
-     //        'status_sifat' => $request->status_sifat,
-    	// 	'created_at' => \Carbon\Carbon::now(),
-    	// 	'updated_at' => \Carbon\Carbon::now()
-    	// ]);
+    	DB::table('tbl_sifat_surat')->insert([
+    		'nama_sifat' => $request->nama_sifat,
+    		'kode_sifat' => $request->kode_sifat,
+    		'deskripsi' => $request->deskripsi,
+            'status_sifat' => $request->status_sifat,
+    		'created_at' => \Carbon\Carbon::now(),
+    		'updated_at' => \Carbon\Carbon::now()
+    	]);
     	
         return Redirect::to('sifat_surat/create')->with('status', "<div class='alert alert-success alert-dismissible fade in' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>
             <strong>Sukses !</strong> Jabatan <strong>".$request->nama_sifat."</strong> berhasil disimpan.

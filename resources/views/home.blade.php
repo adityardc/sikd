@@ -34,7 +34,9 @@
                 <div class="profile-container">
                     <div class="profile-header row">
                         <div class="col-lg-2 col-md-4 col-sm-12 text-center">
+                            @if($foto->foto != NULL)
                             <img src="{{ url($foto->foto) }}" alt="foto_karyawan" class="header-avatar" />
+                            @endif
                         </div>
                         <div class="col-lg-5 col-md-8 col-sm-12 profile-info">
                             <div class="header-fullname">{{ Auth::user()->name }}</div>

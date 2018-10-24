@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-    <link href="{{ asset('assets/js/datatables.bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/js/datatables.min.css') }}" rel="stylesheet" />
 @endsection
 
 @section('breadcrumb')

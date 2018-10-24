@@ -30,9 +30,9 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/bagian', 'coBagian@index')->name('bagian');
 Route::get('/bagian/create', 'coBagian@create')->name('bagian.create');
 Route::get('/bagian/data', 'coBagian@listData')->name('bagian.data');
-Route::post('/bagian/store', 'cobagian@store')->name('bagian.simpan');
-Route::get('/bagian/{id?}/edit', 'cobagian@edit')->name('bagian.edit');
-Route::post('/bagian/{id?}/update', 'cobagian@update');
+Route::post('/bagian/store', 'coBagian@store')->name('bagian.simpan');
+Route::get('/bagian/{id?}/edit', 'coBagian@edit')->name('bagian.edit');
+Route::post('/bagian/{id?}/update', 'coBagian@update');
 
 // MODUL TIM
 Route::get('/tim', 'coTim@index')->name('tim');
